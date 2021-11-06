@@ -11,7 +11,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Prescreminder is a web application to help people with prescription medications. This application will be a single place where users can store and manager their prescription medications. Users will be notified of thier expiring prescriptions and also their daily medication.
+Prescreminder is a web application to help people with prescription medications. This application will be a single place where users can store and manage their prescription medications. Users will be notified of thier expiring prescriptions and also their daily medication.
 
 ### Built With
 
