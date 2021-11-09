@@ -28,7 +28,7 @@ jobs:
       run: ionic build
       working-directory: ${{env.FRONTEND_WORKING_DIRECTORY}}
     - name: Copy Front End Code
-      run: xcopy ${{ env.FRONTEND_WORKING_DIRECTORY }}\src\dist ${{ env.SERVICES_WORKING_DIRECTORY }}\dist 
+      run: xcopy "${{ env.FRONTEND_WORKING_DIRECTORY }}\src\dist" "${{ env.SERVICES_WORKING_DIRECTORY }}\dist" 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
