@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace prescreminder.API
 {
@@ -21,7 +22,7 @@ namespace prescreminder.API
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = @"C:\src\prescreminder\user interface\src\prescreminder\dist";
+                configuration.RootPath = $@"{AppDomain.CurrentDomain.BaseDirectory}\dist";
             });
         }
 
