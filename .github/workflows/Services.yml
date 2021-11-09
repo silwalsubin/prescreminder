@@ -8,7 +8,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: prescreminder.API\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 3.1.x
-  WORKING_DIRECTORY: prescreminder.API
+  WORKING_DIRECTORY: services/src/prescreminder.API
 jobs:
   build:
     runs-on: windows-latest
