@@ -8,8 +8,8 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: prescreminder.API\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 3.1.x
-  SERVICES_WORKING_DIRECTORY: services/src/prescreminder.API
-  FRONTEND_WORKING_DIRECTORY: user interface/src
+  SERVICES_WORKING_DIRECTORY: services\src\prescreminder.API
+  FRONTEND_WORKING_DIRECTORY: user interface\src
 jobs:
   build:
     runs-on: windows-latest
@@ -40,7 +40,7 @@ jobs:
     - name: Publish
       run: dotnet publish "${{ env.SERVICES_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
     - name: Copy Front End Code
-      run: xcopy /E "${{ env.FRONTEND_WORKING_DIRECTORY }}\dist" "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+      run: xcopy /E dist "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
       working-directory: ${{env.FRONTEND_WORKING_DIRECTORY}}
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
