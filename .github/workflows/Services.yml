@@ -21,11 +21,13 @@ jobs:
         node-version: '14'
     - name: Install Ionic
       run: npm install -g @ionic/cli@6.18.0
-    - name: Run npm install
-      run: npm install
+    - name: Run npm ci
+      run: npm ci
       working-directory: ${{env.FRONTEND_WORKING_DIRECTORY}}
     - name: Build Ionic Application
       run: ionic build
+    - name: Copy Front End Code
+      run: xcopy ${{ env.FRONTEND_WORKING_DIRECTORY }}\src\dist ${{ env.SERVICES_WORKING_DIRECTORY }}\dist 
       working-directory: ${{env.FRONTEND_WORKING_DIRECTORY}}
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
