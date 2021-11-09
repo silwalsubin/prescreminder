@@ -19,6 +19,10 @@ namespace prescreminder.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = @"C:\src\prescreminder\user interface\src\prescreminder\dist";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,7 +37,11 @@ namespace prescreminder.API
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseSpaStaticFiles();
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "Index.html";
+            });
 
             app.UseEndpoints(endpoints =>
             {

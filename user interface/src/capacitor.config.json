@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "prescreminder",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

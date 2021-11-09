@@ -1,4 +1,4 @@
-name: Build and deploy .NET Core application to Web App Prescreminder
+name: Build and deploy Prescreminder
 on:
   push:
     branches:
@@ -8,24 +8,34 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: prescreminder.API\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 3.1.x
-  WORKING_DIRECTORY: services/src/prescreminder.API
+  SERVICES_WORKING_DIRECTORY: services/src/prescreminder.API
+  FRONTEND_WORKING_DIRECTORY: user interface/src
 jobs:
   build:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: Install Ionic
+      run: npm install -g ionic@6.18.0
+    - name: Build Ionic Application
+      run: ionic build
+      working-directory: ${{env.FRONTEND_WORKING_DIRECTORY}}
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
     - name: Restore
-      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+      run: dotnet restore "${{ env.SERVICES_WORKING_DIRECTORY }}"
     - name: Build
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+      run: dotnet build "${{ env.SERVICES_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
+      run: dotnet test "${{ env.SERVICES_WORKING_DIRECTORY }}" --no-build
     - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+      run: dotnet publish "${{ env.SERVICES_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:
