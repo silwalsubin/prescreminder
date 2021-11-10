@@ -7,20 +7,16 @@ namespace prescreminder.API.Domain
     {
         public static T GetSettings<T>()
         {
-            var environment = Environment.GetEnvironmentVariable("EnvironmentName");
-            var builder = new ConfigurationBuilder()
+            var aspNetCoreEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
-            if (!string.IsNullOrWhiteSpace(environment))
-            {
-                builder.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("EnvironmentName")}.json",
-                    optional: true);
-            }
+            if (!string.IsNullOrWhiteSpace(aspNetCoreEnvironment))
+                configurationBuilder.AddJsonFile($"appsettings.{aspNetCoreEnvironment}.json", optional: true);
 
-            var configuration = builder.Build();
-            var settings = configuration.GetSection(typeof(T).Name).Get<T>();
+            var settings = configurationBuilder.Build().GetSection(typeof(T).Name).Get<T>();
             return settings;
         }
     }
