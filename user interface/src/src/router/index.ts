@@ -19,19 +19,23 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: '',
-        redirect: '/tabs/tab1'
+        redirect: '/tabs/dashboard'
       },
       {
-        path: 'tab1',
-        component: () => import('@/views/Tab1.vue')
+        path: 'dashboard',
+        component: () => import('@/views/tabs/Dashboard.vue')
       },
       {
-        path: 'tab2',
-        component: () => import('@/views/Tab2.vue')
+        path: 'prescriptions',
+        component: () => import('@/views/tabs/Prescriptions.vue')
       },
       {
-        path: 'tab3',
-        component: () => import('@/views/Tab3.vue')
+        path: 'history',
+        component: () => import('@/views/tabs/History.vue')
+      },
+      {
+        path: 'account',
+        component: () => import('@/views/tabs/Account.vue')
       }
     ]
   }
