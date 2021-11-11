@@ -3,7 +3,7 @@
     <div>
       <h1 class="welcome-message">Welcome to Prescreminder</h1>
       <div class="welcome-buttons">
-        <ion-router-link href="/tabs/">
+        <ion-router-link href="/register">
           <ion-button size="large" shape="round" color="success">Register</ion-button>
         </ion-router-link>
         <ion-button size="large" shape="round" color="primary">Sign In</ion-button>
