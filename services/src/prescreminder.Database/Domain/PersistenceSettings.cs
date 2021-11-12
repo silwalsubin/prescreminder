@@ -1,4 +1,4 @@
-﻿namespace prescreminder.API.Domain
+﻿namespace prescreminder.Database.Domain
 {
     public class PersistenceSettings
     {

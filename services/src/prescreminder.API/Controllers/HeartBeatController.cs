@@ -1,7 +1,8 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using prescreminder.API.Domain;
+using prescreminder.Database.Domain;
+using prescreminder.Utilities;
 
 namespace prescreminder.API.Controllers
 {

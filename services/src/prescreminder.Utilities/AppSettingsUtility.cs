@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 
-namespace prescreminder.API.Domain
+namespace prescreminder.Utilities
 {
     public static class AppSettingsUtility
     {

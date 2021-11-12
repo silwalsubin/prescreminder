@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
-using prescreminder.API.Domain;
+using prescreminder.Database.Domain;
+using prescreminder.Utilities;
 
 namespace precreminder.Tests
 {

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using prescreminder.API.Configurations;
+using Serilog;
 
 namespace prescreminder.API
 {
@@ -8,10 +10,9 @@ namespace prescreminder.API
         public static void Main(string[] args)
         {
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
+                .ConfigureWebHostDefaults(c => c.Configure(ApplicationBuilderConfiguration.Configure))
+                .ConfigureServices(ServicesConfigurations.Configure)
+                .UseSerilog(LoggingConfiguration.Configure)
                 .Build()
                 .Run();
         }
