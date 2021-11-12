@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -16,9 +17,12 @@ namespace prescreminder.API.Configurations
             else
             {
                 app.UseSpaStaticFiles();
-                app.UseSpa(spa =>
+                app.Map(new PathString("/view"), c =>
                 {
-                    spa.Options.SourcePath = "Index.html";
+                    c.UseSpa(spa =>
+                    {
+                        spa.Options.SourcePath = "Index.html";
+                    });
                 });
             }
 
