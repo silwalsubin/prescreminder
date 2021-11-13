@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace prescreminder.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
         private readonly UsersRepository _usersRepository;

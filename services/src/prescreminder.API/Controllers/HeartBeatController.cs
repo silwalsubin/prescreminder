@@ -7,7 +7,7 @@ using prescreminder.Utilities;
 namespace prescreminder.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class HeartBeatController : ControllerBase
     {
         [HttpGet]
