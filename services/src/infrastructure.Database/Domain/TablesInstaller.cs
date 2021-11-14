@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using contracts.Persistence;
 using Dapper;
 
-namespace prescreminder.Database.Domain
+namespace infrastructure.Database.Domain
 {
-    public class TablesInstaller : PrecreminderBaseRepository
+    public class TablesInstaller : BaseRepository
     {
         private readonly IEnumerable<ITableSchema> _tableSchemas;
 

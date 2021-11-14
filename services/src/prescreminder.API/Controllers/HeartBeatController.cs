@@ -1,13 +1,15 @@
-﻿using Dapper;
+﻿using contracts.Persistence;
+using Dapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using prescreminder.Database.Domain;
 using prescreminder.Utilities;
 
 namespace prescreminder.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [AllowAnonymous]
     public class HeartBeatController : ControllerBase
     {
         [HttpGet]

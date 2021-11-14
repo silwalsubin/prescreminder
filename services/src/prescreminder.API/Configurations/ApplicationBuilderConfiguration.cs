@@ -17,9 +17,12 @@ namespace prescreminder.API.Configurations
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthorization();
+            app.UseAuthentication();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers().RequireAuthorization();
             });
 
             if (context.HostingEnvironment.IsProduction())

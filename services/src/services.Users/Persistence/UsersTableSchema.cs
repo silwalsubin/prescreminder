@@ -1,9 +1,9 @@
-﻿using Dapper.Contrib.Extensions;
-using prescreminder.Database.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using contracts.Persistence;
 
-namespace prescreminder.Database.Tables.Users
+namespace services.Users.Persistence
 {
     public class UsersTableSchema : ITableSchema
     {

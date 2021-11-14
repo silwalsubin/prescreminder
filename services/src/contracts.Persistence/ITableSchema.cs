@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace prescreminder.Database.Domain
+namespace contracts.Persistence
 {
     public interface ITableSchema
     {

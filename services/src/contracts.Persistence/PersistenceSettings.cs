@@ -1,4 +1,4 @@
-﻿namespace prescreminder.Database.Domain
+﻿namespace contracts.Persistence
 {
     public class PersistenceSettings
     {

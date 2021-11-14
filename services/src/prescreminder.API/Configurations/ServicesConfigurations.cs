@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using prescreminder.Database;
-using prescreminder.Database.Domain;
+﻿using infrastructure.Database;
+using infrastructure.Database.Domain;
+using Microsoft.Extensions.DependencyInjection;
+using middleware.Authentication;
+using services.Users;
 using System;
 
 namespace prescreminder.API.Configurations
@@ -15,7 +17,10 @@ namespace prescreminder.API.Configurations
             {
                 configuration.RootPath = $@"{AppDomain.CurrentDomain.BaseDirectory}\dist";
             });
-            PrescreminderDatabaseServiceCollection.Configure(services);
+
+            UserServiceConfiguration.Configure(services);
+            AuthenticationMiddleWareConfiguration.Configure(services);
+            DatabaseInfrastructureConfiguration.Configure(services);
         }
     }
 }

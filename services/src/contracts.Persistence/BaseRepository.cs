@@ -1,14 +1,14 @@
-﻿using System.Data;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using prescreminder.Utilities;
+using System.Data;
 
-namespace prescreminder.Database.Domain
+namespace contracts.Persistence
 {
-    public class PrecreminderBaseRepository
+    public class BaseRepository
     {
         protected readonly IDbConnection DbConnection;
 
-        public PrecreminderBaseRepository()
+        public BaseRepository()
         {
             DbConnection = new SqlConnection(AppSettingsUtility.GetSettings<PersistenceSettings>().DbConnectionString);
         }

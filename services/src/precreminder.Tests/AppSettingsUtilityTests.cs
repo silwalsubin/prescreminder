@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using prescreminder.Database.Domain;
+﻿using contracts.Persistence;
+using NUnit.Framework;
 using prescreminder.Utilities;
 
 namespace precreminder.Tests

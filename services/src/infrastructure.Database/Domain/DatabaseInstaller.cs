@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.Hosting;
+using Serilog;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
-using Serilog;
 
-namespace prescreminder.Database.Domain
+namespace infrastructure.Database.Domain
 {
     public class DatabaseInstaller : BackgroundService
     {
