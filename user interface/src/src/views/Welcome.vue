@@ -6,7 +6,7 @@
         <ion-router-link href="/register">
           <ion-button size="large" shape="round" color="success">Register</ion-button>
         </ion-router-link>
-        <ion-router-link href="/tabs/">
+        <ion-router-link href="/login">
           <ion-button size="large" shape="round" color="primary">Sign In</ion-button>
         </ion-router-link>
       </div>

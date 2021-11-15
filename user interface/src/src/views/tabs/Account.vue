@@ -7,16 +7,15 @@
     </ion-header>
     <ion-content :fullscreen="true">   
       <div class="account-tab-container">
-        <ion-router-link href="/">
           <ion-button 
             size="large" 
             shape="round" 
             color="primary"
             :disabled="false"
+            @click="asyncLogOut"
           >
           Sign Out
           </ion-button>
-        </ion-router-link>
       </div>
     </ion-content>
   </ion-page>
@@ -32,6 +31,9 @@ import {
   IonContent
 } from '@ionic/vue';
 
+import { useStore } from '../../store/store'
+import { useRouter } from 'vue-router';
+
 export default  {
   name: 'AccountTab',
   components: { 
@@ -41,6 +43,21 @@ export default  {
     IonTitle, 
     IonContent, 
     IonPage, 
+  }, 
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+
+    const asyncLogOut = async () => {
+      await store.dispatch('logOut');
+      router.push({
+        name: 'WelcomePage'
+      })
+    }
+
+    return {
+      asyncLogOut
+    }
   }
 }
 </script>

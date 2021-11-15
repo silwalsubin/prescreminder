@@ -3,15 +3,23 @@ import { RouteRecordRaw } from 'vue-router';
 import Tabs from '../views/Tabs.vue'
 import Welcome from '../views/Welcome.vue'
 import Register from '../views/Register.vue'
+import LogIn from '../views/Login.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    component: Welcome
+    component: Welcome,
+    name: 'WelcomePage'
   },
   {
     path: '/register',
-    component: Register
+    component: Register,
+    name: 'RegisterPage'
+  },
+  {
+    path: '/login',
+    component: LogIn,
+    name: 'LogInPage'
   },
   {
     path: '/tabs/',
@@ -19,23 +27,28 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: '',
-        redirect: '/tabs/dashboard'
+        redirect: '/tabs/dashboard',
+        name: 'DashboardTab Default'
       },
       {
         path: 'dashboard',
-        component: () => import('@/views/tabs/Dashboard.vue')
+        component: () => import('@/views/tabs/Dashboard.vue'),
+        name: 'DashboardTab'
       },
       {
         path: 'prescriptions',
-        component: () => import('@/views/tabs/Prescriptions.vue')
+        component: () => import('@/views/tabs/Prescriptions.vue'),
+        name: 'PrescriptionTab'
       },
       {
         path: 'history',
-        component: () => import('@/views/tabs/History.vue')
+        component: () => import('@/views/tabs/History.vue'),
+        name: 'HistoryTab'
       },
       {
         path: 'account',
-        component: () => import('@/views/tabs/Account.vue')
+        component: () => import('@/views/tabs/Account.vue'),
+        name: 'AccountTab'
       }
     ]
   }

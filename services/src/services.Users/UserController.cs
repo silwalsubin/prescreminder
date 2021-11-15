@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using middleware.Authentication;
 using services.Users.Payload;
 using services.Users.Persistence;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace services.Users
 {
@@ -52,10 +52,10 @@ namespace services.Users
         [AllowAnonymous]
         public async Task<ActionResult> Login([FromBody] UserLogInPayload payload)
         {
-            var emailAddressProvided = !string.IsNullOrWhiteSpace(payload.EmailAddress);
-            var userRecord = emailAddressProvided
-                ? await _usersRepository.GetByEmailAddress(payload.EmailAddress)
-                : await _usersRepository.GetByUserName(payload.UserName);
+            var isEmailAddress = payload.EmailAddressOrUserName.Contains("@");
+            var userRecord = isEmailAddress
+                ? await _usersRepository.GetByEmailAddress(payload.EmailAddressOrUserName)
+                : await _usersRepository.GetByUserName(payload.EmailAddressOrUserName);
 
             if (userRecord == null || payload.Password != userRecord.Password)
                 return BadRequest("Invalid credentials");

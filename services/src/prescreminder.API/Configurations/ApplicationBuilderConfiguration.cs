@@ -12,6 +12,13 @@ namespace prescreminder.API.Configurations
             if (context.HostingEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors(corsPolicyBuilder =>
+                {
+                    corsPolicyBuilder
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin();
+                });
             }
 
             app.UseHttpsRedirection();
