@@ -1,10 +1,7 @@
 import { InjectionKey } from 'vue'
 import { createStore, useStore as baseUseStore, Store } from 'vuex'
 import httpClient from './http-client'
-import Cookies from 'cookies-ts';
-const BEARER_TOKEN_COOKIE_KEY = "access_token";
-const cookies = new Cookies();
-
+import { removeBearerToken, setBearerToken } from '../bearer-token-service'
 
 export interface State {
   count: number;
@@ -17,11 +14,11 @@ export const store = createStore<State>({
     logIn(_, payload) {
       return httpClient.post('/user/login', payload).then(response => {
         const bearerToken = response.data.token;
-        cookies.set(BEARER_TOKEN_COOKIE_KEY, bearerToken);
+        setBearerToken(bearerToken);
       })
     },
     logOut() {
-      cookies.remove(BEARER_TOKEN_COOKIE_KEY);
+      removeBearerToken();
     }
   }
 })

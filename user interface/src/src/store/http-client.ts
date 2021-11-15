@@ -1,11 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { toastController } from '@ionic/vue';
-import Cookies from 'cookies-ts';
+import { getBearerToken } from '../bearer-token-service'
 
-const cookies = new Cookies();
 const httpClient = axios;
-// httpClient.defaults.baseURL = "https://localhost:44340/api"
-httpClient.defaults.baseURL = "https://prescreminder.azurewebsites.net/api"
+httpClient.defaults.baseURL = "https://localhost:44340/api"
+// httpClient.defaults.baseURL = "https://prescreminder.azurewebsites.net/api"
 httpClient.interceptors.response.use((response) => {
   return response;
 }, async error => {
@@ -19,7 +18,7 @@ httpClient.interceptors.response.use((response) => {
       message: error.response.data,
       duration: 2000, 
       color: "danger",
-      translucent: true, 
+      animated: true
     });
     toast.present();
   }
@@ -27,7 +26,7 @@ httpClient.interceptors.response.use((response) => {
 });
 
 const injectBearerToken = (config: AxiosRequestConfig): AxiosRequestConfig => {
-    const bearerToken = cookies.get("access_token");
+    const bearerToken = getBearerToken();
     if (bearerToken && config.headers) {
       config.headers.Authorization = `Bearer ${bearerToken}`;
     }

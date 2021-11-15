@@ -73,6 +73,7 @@ import {
 import { ref, computed } from 'vue'
 import { useStore } from '../store/store'
 import { useRouter } from 'vue-router';
+import { RouteName } from '../router/route-names';
 
 export default  {
   name: 'LogIn',
@@ -104,7 +105,7 @@ export default  {
       try {
         await store.dispatch('logIn', form.value);
         router.push({
-          name: 'DashboardTab Default'
+          name: RouteName.DashboardTabDefault
         })
       } catch (error) {
         console.log(error)

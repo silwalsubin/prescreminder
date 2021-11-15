@@ -33,6 +33,7 @@ import {
 
 import { useStore } from '../../store/store'
 import { useRouter } from 'vue-router';
+import { RouteName } from '../../router/route-names';
 
 export default  {
   name: 'AccountTab',
@@ -51,7 +52,7 @@ export default  {
     const asyncLogOut = async () => {
       await store.dispatch('logOut');
       router.push({
-        name: 'WelcomePage'
+        name: RouteName.WelcomePage
       })
     }
 
