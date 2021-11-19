@@ -1,4 +1,4 @@
-name: Build and deploy Prescreminder
+name: Build and Deploy Prescreminder
 on:
   push:
     branches:
@@ -48,6 +48,8 @@ jobs:
         files: '${{env.AZURE_WEBAPP_PACKAGE_PATH}}/appsettings.json'
       env:
         PersistenceSettings.DbConnectionString: ${{ secrets.PRESCREMINDERCONNECTIONSTRING }}
+        AuthenticationSettings.JwtIssuer: ${{ secrets.JWT_ISSUER }}
+        AuthenticationSettings.JwtKey: ${{ secrets.JWT_KEY }}
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:

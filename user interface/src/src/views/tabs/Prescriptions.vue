@@ -6,6 +6,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
+      <add-prescription-button />
       <div class="prescriptions-tab-container">
         My Prescriptions
       </div>
@@ -14,11 +15,26 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import { 
+  IonContent,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonPage, 
+} from '@ionic/vue';
+
+import AddPrescriptionButton from '../../components/add-presciption-button.vue'
 
 export default  {
   name: 'PrescriptionsTab',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
+  components: {
+    AddPrescriptionButton,
+    IonContent,
+    IonHeader,
+    IonToolbar, 
+    IonTitle,
+    IonPage, 
+  },
 }
 </script>
 
