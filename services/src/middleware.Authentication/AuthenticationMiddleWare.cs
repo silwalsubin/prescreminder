@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using prescreminder.Utilities;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,13 +11,14 @@ namespace middleware.Authentication
     {
         public static string GenerateJsonWebToken(Claim[] claims = null)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TempSettings.JwtKey));
+            var authenticationSettings = AppSettingsUtility.GetSettings<AuthenticationSettings>();
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
 
             var token = new JwtSecurityToken(
-                TempSettings.JwtIssuer,
-                TempSettings.JwtIssuer,
+                authenticationSettings.JwtIssuer,
+                authenticationSettings.JwtIssuer,
                 claims,
                 expires: DateTime.Now.AddMinutes(120),
                 signingCredentials: credentials

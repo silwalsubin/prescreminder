@@ -9,7 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace services.Users
+namespace services.Users.WebApi
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -40,7 +40,7 @@ namespace services.Users
                     LastName = "Silwal",
                     DateOfBirthUtc = DateTime.UtcNow
                 };
-                await _usersRepository.Insert(testUser);
+                await _usersRepository.InsertAsync(testUser);
                 result.Add(testUser);
             }
 

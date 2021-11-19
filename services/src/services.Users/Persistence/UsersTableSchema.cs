@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using contracts.Persistence;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using contracts.Persistence;
 
 namespace services.Users.Persistence
 {
     public class UsersTableSchema : ITableSchema
     {
-        public IEnumerable<ITableSchema> DependsOn => new List<ITableSchema>();
         public string Schema => "dbo";
         public string TableName => "Users";
         public string CreateScript => $@"

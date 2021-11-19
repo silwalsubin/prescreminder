@@ -2,6 +2,7 @@
 using infrastructure.Database.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using middleware.Authentication;
+using services.UserPrescriptions;
 using services.Users;
 using System;
 
@@ -19,6 +20,7 @@ namespace prescreminder.API.Configurations
             });
 
             UserServiceConfiguration.Configure(services);
+            UserPrescriptionServiceConfiguration.Configure(services);
             AuthenticationMiddleWareConfiguration.Configure(services);
             DatabaseInfrastructureConfiguration.Configure(services);
         }
