@@ -2,12 +2,12 @@ import { Guid } from 'guid-typescript';
 
 class TimeOfDay {
   constructor(){
-    this.id = Guid.create();
+    this.id = Guid.create().toString();
     this.hour = 0;
     this.minute = 0;
   }
 
-  id: Guid;
+  id: string;
   hour: number;
   minute: number;
 }

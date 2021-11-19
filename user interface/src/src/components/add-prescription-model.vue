@@ -6,10 +6,10 @@
         <ion-button 
           slot="end"
           fill="clear"
-          :disabled="!isFormValid"
-          @click="handleConfirm"
+          @click="handleCancel"
+          :disabled="formDisabled"
         >
-          Add
+          Cancel
         </ion-button>
       </ion-toolbar>
     </ion-header>
@@ -18,26 +18,31 @@
         v-model:inputValue="form.name"
         label="Name of medication"
         placeholder="Required"
+        :disabled="formDisabled"
       />
       <input-field
         v-model:inputValue="form.quantity"
         label="Quantity of each intake"
         placeholder="Required"
+        :disabled="formDisabled"
       />
       <date-picker
         v-model:inputValue="form.startDate"
         label="Date to begin the medication"
         placeholder="Required"
+        :disabled="formDisabled"
       />
       <date-picker
         v-model:inputValue="form.expirationDate"
         label="Date till the mediation will last"
         placeholder="Optional"
+        :disabled="formDisabled"
       />
       <date-picker
         v-model:inputValue="form.completeDate"
         label="Date the medication is no longer required"
         placeholder="Optional"
+        :disabled="formDisabled"
       />
       <div class="medication-intake-items">
         <h5>Medication intake times</h5>
@@ -46,8 +51,9 @@
           shape="round"
           size="default"
           @click="handleAddTimeOfDay"
+          :disabled="formDisabled"
         >
-        Add New
+        New Time
         </ion-button>
       </div>
 
@@ -57,6 +63,7 @@
             :hour="timeOfDay.hour"
             :minute="timeOfDay.minute"
             @input="handleTimeOfDayChange($event, timeOfDay.id)"
+            :disabled="formDisabled"
           />
         </a>
         <ion-button
@@ -65,11 +72,21 @@
           fill="outline"
           color="danger"
           size="small"
+          :disabled="formDisabled"
           @click="handleDelete(timeOfDay.id)"
         >
           Delete
         </ion-button>
       </div>
+      <ion-button 
+        size="large" 
+        color="success"
+        expand="full"
+        :disabled="!isFormValid || formDisabled"
+        @click="handleConfirm"
+      >
+      Add Prescription
+      </ion-button>
     </ion-content>
   </div>
 </template>
@@ -82,11 +99,12 @@ import {
   IonTitle, 
   IonToolbar,
 } from '@ionic/vue';
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import TimePicker from './time-picker.vue';
 import DatePicker from './form-elements/date-picker.vue';
 import InputField from './form-elements/input-field.vue';
 import { Guid } from 'guid-typescript';
+import { toastController } from '@ionic/vue';
 
 import {
   informationCircle,
@@ -94,7 +112,6 @@ import {
   trashOutline,
   addCircleOutline
 } from 'ionicons/icons';
-// import moment from 'moment';
 
 import { useStore } from '../store/store'
 
@@ -112,24 +129,15 @@ export default {
   },
   props: {
     title: { type: String, required: true },
+    isVisible: { type: Boolean, required: true },
   },
-  setup() {
+  setup(props, {emit}) {
     const store = useStore();
-
+    const formDisabled = ref(false);
     const form = ref(store.getters.addPrescriptionPayload);
-    // const form = ref({
-    //   name: '',
-    //   quantity: '',
-    //   startDate: moment().toISOString(),
-    //   completeDate: null,
-    //   expirationDate: null,
-    //   timesOfDay: [
-    //     { id: Guid.create(), hour: 11, minute: 22 },
-    //   ]
-    // });
 
     const handleAddTimeOfDay = () => {
-      form.value.timesOfDay.push({ id: Guid.create(), hour: 0, minute: 0 })
+      form.value.timesOfDay.push({ id: Guid.create().toString(), hour: 0, minute: 0 })
     }
 
     const handleTimeOfDayChange = (hourMinute, id) => {
@@ -151,12 +159,31 @@ export default {
               && formValue.timesOfDay.length > 0
     })
 
-    const handleConfirm = () => {
-      store.dispatch('addPrescription', form);
+    const handleConfirm = async () => {
+      formDisabled.value = true;
+      await store.dispatch('addPrescription', form.value);
+      formDisabled.value = false;
+      const toast = await toastController.create({
+        message: 'Prescription added successfully',
+        duration: 2000,
+        color: "success", 
+        animated: true
+      });
+      toast.present();
+      emit('close');
+    }
+
+    onMounted(() => {
+      form.value = store.getters.addPrescriptionPayload;
+    })
+
+    const handleCancel = () => {
+      emit('close');
     }
 
     return {
       addCircleOutline,
+      formDisabled,
       form,
       isFormValid,
       informationCircle,
@@ -165,6 +192,7 @@ export default {
       handleAddTimeOfDay,
       handleConfirm,
       handleTimeOfDayChange,
+      handleCancel,
       handleDelete,
     }
   }

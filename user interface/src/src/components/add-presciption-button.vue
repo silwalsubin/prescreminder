@@ -1,44 +1,38 @@
 <template>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="success">
-      <ion-icon @click="openModal" :icon="add"></ion-icon>
+    <ion-fab-button @click="setOpen(true)" color="success">
+      <ion-icon :icon="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  <ion-modal
+    :is-open="isOpenRef"
+    css-class="my-custom-class"
+    @didDismiss="setOpen(false)"
+  >
+    <Modal 
+      title="Add Prescription"
+      @close="setOpen(false)"
+      :isVisible="isOpenRef"
+    />
+  </ion-modal>
 </template>
 
-<script lang="ts">
-import { 
-  IonFab,
-  IonFabButton,
-  IonIcon,
-  modalController
-} from '@ionic/vue';
-
+<script>
 import { add } from 'ionicons/icons';
-import Modal from './add-prescription-model.vue';
+import { IonModal, IonFab, IonFabButton, IonIcon, } from '@ionic/vue';
+import { defineComponent, ref } from 'vue';
+import Modal from './add-prescription-model.vue'
 
-export default {
-  name: 'AddPrescriptionButton',
-  components: {
-    IonFab,
-    IonFabButton,
-    IonIcon
-  },
+export default defineComponent({
+  components: { IonModal, Modal, IonFab, IonFabButton, IonIcon, },
   setup() {
-    const openModal = async () => {
-      const modal = await modalController.create({
-        component: Modal,
-        componentProps: {
-          title: "Add Prescription",
-        }
-      });
-      return modal.present();
-    };
-
+    const isOpenRef = ref(false);
+    const setOpen = (state) => isOpenRef.value = state;
     return {
       add,
-      openModal,
+      isOpenRef, 
+      setOpen,  
     }
   }
-}
+});
 </script>

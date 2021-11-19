@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using contracts.Persistence;
+﻿using contracts.Persistence;
 using Dapper;
 using Dapper.Contrib.Extensions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace services.Users.Persistence
 {
@@ -43,7 +43,7 @@ namespace services.Users.Persistence
             return result;
         }
 
-        public async Task Insert(UsersTableSchema.UserRecord record)
+        public async Task InsertAsync(UsersTableSchema.UserRecord record)
         {
             await DbConnection.InsertAsync(record);
         }

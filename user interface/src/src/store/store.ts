@@ -3,6 +3,7 @@ import { createStore, useStore as baseUseStore, Store } from 'vuex';
 import httpClient from './http-client';
 import { removeBearerToken, setBearerToken } from '../bearer-token-service';
 import AddPrescriptionPayload from './payloads/add-prescription-payload';
+import _ from 'lodash';
 
 
 export interface State {
@@ -23,14 +24,16 @@ export const store = createStore<State>({
       })
     },
     addPrescription(_, payload) {
-      console.log(payload);
+      return httpClient.post('/userPrescription/add', payload).then(response => {
+        console.log(response);
+      })
     },
     logOut() {
       removeBearerToken();
     }
   },
   getters: {
-    addPrescriptionPayload: state => state.addPrescriptionPayload
+    addPrescriptionPayload: state => _.cloneDeep(state.addPrescriptionPayload)
   }
 })
 
