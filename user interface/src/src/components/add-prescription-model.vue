@@ -31,18 +31,24 @@
         label="Date to begin the medication"
         placeholder="Required"
         :disabled="formDisabled"
+        :max="String(new Date().getFullYear() + 10)"
+        :min="String(new Date().toISOString().split('T')[0])"
       />
       <date-picker
         v-model:inputValue="form.expirationDate"
         label="Date till the mediation will last"
         placeholder="Optional"
         :disabled="formDisabled"
+        :max="String(new Date().getFullYear() + 10)"
+        :min="String(new Date().toISOString().split('T')[0])"
       />
       <date-picker
         v-model:inputValue="form.completeDate"
         label="Date the medication is no longer required"
         placeholder="Optional"
         :disabled="formDisabled"
+        :max="String(new Date().getFullYear() + 10)"
+        :min="String(new Date().toISOString().split('T')[0])"
       />
       <div class="medication-intake-items">
         <h5>Medication intake times</h5>
@@ -113,7 +119,7 @@ import {
   addCircleOutline
 } from 'ionicons/icons';
 
-import { useStore } from '../store/store'
+import { useStore } from '@/store/store'
 
 export default {
   name: 'PrescriptionModal',

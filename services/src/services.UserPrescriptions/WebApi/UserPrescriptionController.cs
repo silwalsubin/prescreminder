@@ -3,6 +3,7 @@ using middleware.Authentication;
 using services.UserPrescriptions.Payloads;
 using services.UserPrescriptions.Persistence;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,37 @@ namespace services.UserPrescriptions.WebApi
         {
             _userPrescriptionsRepository = userPrescriptionsRepository;
             _prescriptionTimesRepository = prescriptionTimesRepository;
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<PrescriptionViewModal>> Get()
+        {
+            var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
+            var prescriptionRecords = await _userPrescriptionsRepository.GetAsync(userId);
+            var result = new List<PrescriptionViewModal>();
+            foreach (var x in prescriptionRecords)
+            {
+                var prescriptionTimes = (await _prescriptionTimesRepository.GetAsync(x.PrescriptionId)).Select(t => new TimeOfDay
+                {
+                    Id = t.PrescriptionTimeId,
+                    Hour = t.Hour,
+                    Minute = t.Minute,
+                }).ToList();
+
+                var viewModal = new PrescriptionViewModal
+                {
+                    PrescriptionId = x.PrescriptionId,
+                    Name = x.Name,
+                    Quantity = x.Quantity,
+                    CompleteDate = x.CompleteDateUtc,
+                    StartDate = x.StartDateUtc,
+                    ExpirationDate = x.ExpirationDateUtc,
+                    TimesOfDay = prescriptionTimes
+                };
+
+                result.Add(viewModal);
+            }
+            return result;
         }
 
         [HttpPost]
@@ -38,7 +70,7 @@ namespace services.UserPrescriptions.WebApi
                 Name = payload.Name,
                 Quantity = payload.Quantity,
             };
-            var prescriptionRecords = payload.TimesOfDay.Select(x =>
+            var prescriptionTimeRecords = payload.TimesOfDay.Select(x =>
                 new PrescriptionTimesTableSchema.PrescriptionTimeRecord
                 {
                     PrescriptionId = prescriptionId,
@@ -49,7 +81,7 @@ namespace services.UserPrescriptions.WebApi
                 });
 
             await _userPrescriptionsRepository.InsertAsync(userPrescriptionRecord);
-            foreach (var prescriptionRecord in prescriptionRecords)
+            foreach (var prescriptionRecord in prescriptionTimeRecords)
             {
                 await _prescriptionTimesRepository.InsertAsync(prescriptionRecord);
             }

@@ -1,5 +1,8 @@
 ﻿using contracts.Persistence;
+using Dapper;
 using Dapper.Contrib.Extensions;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace services.UserPrescriptions.Persistence
@@ -16,6 +19,17 @@ namespace services.UserPrescriptions.Persistence
         public async Task InsertAsync(PrescriptionTimesTableSchema.PrescriptionTimeRecord record)
         {
             await DbConnection.InsertAsync(record);
+        }
+
+        public async Task<IEnumerable<PrescriptionTimesTableSchema.PrescriptionTimeRecord>> GetAsync(Guid prescriptionId)
+        {
+            var sql = @$"
+                SELECT * FROM [{_prescriptionTimesTableSchema.Schema}].[{_prescriptionTimesTableSchema.TableName}]
+                WHERE PrescriptionId = @prescriptionId
+            ";
+            var result =
+                await DbConnection.QueryAsync<PrescriptionTimesTableSchema.PrescriptionTimeRecord>(sql, new { prescriptionId });
+            return result;
         }
     }
 }

@@ -31,9 +31,9 @@ import {
   IonContent
 } from '@ionic/vue';
 
-import { useStore } from '../../store/store'
+import { useStore } from '@/store/store'
 import { useRouter } from 'vue-router';
-import { RouteName } from '../../router/route-names';
+import { RouteName } from '@/router/route-names';
 
 export default  {
   name: 'AccountTab',

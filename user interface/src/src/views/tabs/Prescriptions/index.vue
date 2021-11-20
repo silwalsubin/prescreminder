@@ -8,7 +8,11 @@
     <ion-content :fullscreen="true">
       <add-prescription-button />
       <div class="prescriptions-tab-container">
-        My Prescriptions
+        <prescription 
+          v-for="prescription in prescriptions" 
+          :key="prescription.prescriptionId"
+          :prescription="prescription"
+        />
       </div>
     </ion-content>
   </ion-page>
@@ -23,7 +27,10 @@ import {
   IonPage, 
 } from '@ionic/vue';
 
-import AddPrescriptionButton from '../../components/add-presciption-button.vue'
+import AddPrescriptionButton from '@/components/add-presciption-button.vue'
+import { useStore } from '@/store/store'
+import { onMounted, computed } from 'vue'
+import Prescription from './presciption.vue'
 
 export default  {
   name: 'PrescriptionsTab',
@@ -33,16 +40,27 @@ export default  {
     IonHeader,
     IonToolbar, 
     IonTitle,
-    IonPage, 
+    IonPage,
+    Prescription,
   },
+  setup() {
+    const store = useStore();
+
+    const prescriptions = computed(() => store.getters.prescriptions);
+
+    onMounted(async () => {
+      await store.dispatch('loadPrescriptions');
+    })
+
+    return {
+      prescriptions,
+    }
+  }
 }
 </script>
 
 <style scoped>
 .prescriptions-tab-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+  padding: 20px;
 }
 </style>

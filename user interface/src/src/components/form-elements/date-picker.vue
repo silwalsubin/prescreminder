@@ -7,6 +7,8 @@
       v-model="vModel"
       display-format="MM/DD/YYYY"
       :placeholder="placeholder"
+      :min="min"
+      :max="max"
     />
   </ion-item>
 </template>
@@ -31,7 +33,9 @@ export default {
   props: {
     inputValue: { type: String },
     placeholder: { type: String, required: true },
-    label: {type: String, required: true }
+    label: {type: String, required: true },
+    max: {type: String, required: false },
+    min: {type: String, required: false },
   },
   setup(props, {emit}) {
     const vModel = computed({ 

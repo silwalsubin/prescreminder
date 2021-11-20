@@ -1,4 +1,4 @@
-import TimeOfDay from "./time-of-day";
+import TimeOfDay from "../domain/time-of-day";
 import moment from 'moment';
 
 class AddPrescriptionPayload {

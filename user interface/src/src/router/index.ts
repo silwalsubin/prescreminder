@@ -46,7 +46,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'prescriptions',
-        component: () => import('@/views/tabs/Prescriptions.vue'),
+        component: () => import('@/views/tabs/Prescriptions/index.vue'),
         name: RouteName.PrescriptionTab
       },
       {
