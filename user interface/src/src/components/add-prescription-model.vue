@@ -63,12 +63,12 @@
         </ion-button>
       </div>
 
-      <div class="time-of-day-container" v-for="timeOfDay in form.timesOfDay" :key="timeOfDay.id">
+      <div class="time-of-day-container" v-for="(timeOfDay, index) in form.timesOfDay" :key="timeOfDay.id">
         <a>
           <time-picker
             :hour="timeOfDay.hour"
             :minute="timeOfDay.minute"
-            @input="handleTimeOfDayChange($event, timeOfDay.id)"
+            @input="handleTimeOfDayChange($event, index)"
             :disabled="formDisabled"
           />
         </a>
@@ -79,7 +79,7 @@
           color="danger"
           size="small"
           :disabled="formDisabled"
-          @click="handleDelete(timeOfDay.id)"
+          @click="handleDelete(index)"
         >
           Delete
         </ion-button>
@@ -109,8 +109,8 @@ import { ref, computed, onMounted } from 'vue'
 import TimePicker from './time-picker.vue';
 import DatePicker from './form-elements/date-picker.vue';
 import InputField from './form-elements/input-field.vue';
-import { Guid } from 'guid-typescript';
 import { toastController } from '@ionic/vue';
+import TimeOfDay from "@/store/domain/time-of-day";
 
 import {
   informationCircle,
@@ -143,17 +143,15 @@ export default {
     const form = ref(store.getters.addPrescriptionPayload);
 
     const handleAddTimeOfDay = () => {
-      form.value.timesOfDay.push({ id: Guid.create().toString(), hour: 0, minute: 0 })
+      form.value.timesOfDay.push(new TimeOfDay(0, 0))
     }
 
-    const handleTimeOfDayChange = (hourMinute, id) => {
-      const index = form.value.timesOfDay.findIndex(x => x.id === id);
+    const handleTimeOfDayChange = (hourMinute, index) => {
       form.value.timesOfDay[index].hour = hourMinute.hour;
       form.value.timesOfDay[index].minute = hourMinute.minute;
     }
 
-    const handleDelete = (id) => {
-      const index = form.value.timesOfDay.findIndex(x => x.id === id);
+    const handleDelete = (index) => {
       form.value.timesOfDay.splice(index, 1);
     }
 

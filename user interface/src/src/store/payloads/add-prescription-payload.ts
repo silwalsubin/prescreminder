@@ -7,7 +7,7 @@ class AddPrescriptionPayload {
     this.quantity = '';
     this.startDate = moment().toISOString()
     this.timesOfDay = [
-      new TimeOfDay()
+      new TimeOfDay(0, 0)
     ]
   }
 

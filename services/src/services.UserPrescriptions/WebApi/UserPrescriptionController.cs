@@ -32,7 +32,6 @@ namespace services.UserPrescriptions.WebApi
             {
                 var prescriptionTimes = (await _prescriptionTimesRepository.GetAsync(x.PrescriptionId)).Select(t => new TimeOfDay
                 {
-                    Id = t.PrescriptionTimeId,
                     Hour = t.Hour,
                     Minute = t.Minute,
                 }).ToList();
@@ -81,18 +80,19 @@ namespace services.UserPrescriptions.WebApi
                 Name = payload.Name,
                 Quantity = payload.Quantity,
             };
-            var prescriptionTimeRecords = payload.TimesOfDay.Select(x =>
-                new PrescriptionTimesTableSchema.PrescriptionTimeRecord
-                {
-                    PrescriptionId = prescriptionId,
-                    PrescriptionTimeId = x.Id,
-                    Hour = x.Hour,
-                    Minute = x.Minute,
-                    Second = 0
-                });
+
+            var uniquePrescriptionTimeRecords = payload.TimesOfDay.Select(x => new { x.Hour, x.Minute }).Distinct().Select(x =>
+                 new PrescriptionTimesTableSchema.PrescriptionTimeRecord
+                 {
+                     PrescriptionId = prescriptionId,
+                     PrescriptionTimeId = Guid.NewGuid(),
+                     Hour = x.Hour,
+                     Minute = x.Minute,
+                     Second = 0
+                 });
 
             await _userPrescriptionsRepository.InsertAsync(userPrescriptionRecord);
-            foreach (var prescriptionRecord in prescriptionTimeRecords)
+            foreach (var prescriptionRecord in uniquePrescriptionTimeRecords)
             {
                 await _prescriptionTimesRepository.InsertAsync(prescriptionRecord);
             }
