@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using prescreminder.Utilities;
+using System;
 using System.Text;
 
 namespace middleware.Authentication
@@ -22,7 +23,8 @@ namespace middleware.Authentication
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = authenticationSettings.JwtIssuer,
                     ValidAudience = authenticationSettings.JwtIssuer,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
+                    ClockSkew = TimeSpan.Zero
                 };
             });
 

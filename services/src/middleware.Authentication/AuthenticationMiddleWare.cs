@@ -20,7 +20,7 @@ namespace middleware.Authentication
                 authenticationSettings.JwtIssuer,
                 authenticationSettings.JwtIssuer,
                 claims,
-                expires: DateTime.Now.AddMinutes(120),
+                expires: DateTime.Now.AddMinutes(authenticationSettings.TokenExpirationMinutes),
                 signingCredentials: credentials
             );
 

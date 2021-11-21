@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { toastController } from '@ionic/vue';
-import { getBearerToken } from '../bearer-token-service'
+import { getBearerToken, removeBearerToken } from '../bearer-token-service'
 
 const httpClient = axios;
 // httpClient.defaults.baseURL = "https://localhost:44340/api"
@@ -9,8 +9,20 @@ httpClient.interceptors.response.use((response) => {
   return response;
 }, async error => {
   // Do something with response error
+  const waitTime = 4000;
   if (error.response.status === 401) {
-      console.log('unauthorized, logging out ...');
+    const toast = await toastController.create({
+      message: 'Session Expired!',
+      duration: waitTime, 
+      color: "warning",
+      animated: true
+    });
+    toast.present();
+
+    setTimeout(() => {
+      removeBearerToken();
+      window.location.href = `${window.location.origin}`;
+    }, waitTime);
   }
 
   if (error.response.status === 400) {
