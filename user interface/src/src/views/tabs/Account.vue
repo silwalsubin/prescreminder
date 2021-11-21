@@ -1,10 +1,6 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>My Account</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <tab-header header-title="My Account"/>
     <ion-content :fullscreen="true">   
       <div class="account-tab-container">
           <ion-button 
@@ -25,11 +21,9 @@
 import {
   IonButton,
   IonPage,
-  IonHeader, 
-  IonToolbar, 
-  IonTitle, 
   IonContent
 } from '@ionic/vue';
+import TabHeader from '@/components/tabs/tab-header.vue';
 
 import { useStore } from '@/store/store'
 import { useRouter } from 'vue-router';
@@ -39,11 +33,9 @@ export default  {
   name: 'AccountTab',
   components: { 
     IonButton,
-    IonHeader, 
-    IonToolbar, 
-    IonTitle, 
     IonContent, 
-    IonPage, 
+    IonPage,
+    TabHeader,
   }, 
   setup() {
     const store = useStore();

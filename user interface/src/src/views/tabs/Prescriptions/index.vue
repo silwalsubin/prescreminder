@@ -1,10 +1,6 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>My Prescriptions</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <tab-header header-title="My Prescriptions"/>
     <ion-content :fullscreen="true">
       <add-prescription-button />
       <div class="prescriptions-tab-container">
@@ -21,27 +17,22 @@
 <script lang="ts">
 import { 
   IonContent,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonPage, 
+  IonPage,
 } from '@ionic/vue';
 
 import AddPrescriptionButton from '@/components/add-presciption-button.vue'
+import TabHeader from '@/components/tabs/tab-header.vue'
 import { useStore } from '@/store/store'
 import { onMounted, computed } from 'vue'
 import Prescription from './presciption.vue'
-
 export default  {
   name: 'PrescriptionsTab',
   components: {
     AddPrescriptionButton,
     IonContent,
-    IonHeader,
-    IonToolbar, 
-    IonTitle,
     IonPage,
     Prescription,
+    TabHeader,
   },
   setup() {
     const store = useStore();

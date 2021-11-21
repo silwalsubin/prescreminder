@@ -1,10 +1,6 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Prescreminder</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <tab-header header-title="Prescreminder"/>
     <ion-content :fullscreen="true">  
       <div class="dashboard-tab-container">
       Dashboard
@@ -14,11 +10,12 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import { IonPage, IonContent } from '@ionic/vue';
+import TabHeader from '@/components/tabs/tab-header.vue'
 
 export default  {
   name: 'DashboardTab',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
+  components: { IonContent, IonPage, TabHeader, }
 }
 </script>
 
