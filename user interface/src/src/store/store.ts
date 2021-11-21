@@ -36,6 +36,11 @@ export const store = createStore<State>({
         dispatch('loadPrescriptions');
       });
     },
+    deletePrescription({commit}, prescriptionId) {
+      return httpClient.delete(`/userPrescription/${prescriptionId}`).then(() => {
+        commit('deletePrescription', prescriptionId);
+      })
+    },
     logOut() {
       removeBearerToken();
     }
@@ -43,6 +48,10 @@ export const store = createStore<State>({
   mutations: {
     setPrescriptions(state, payload){
       state.prescriptions = payload;
+    },
+    deletePrescription(state, prescriptionId){
+      const index = state.prescriptions.findIndex(x => x.prescriptionId === prescriptionId);
+      state.prescriptions.splice(index, 1);
     }
   },
   getters: {

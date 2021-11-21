@@ -31,5 +31,14 @@ namespace services.UserPrescriptions.Persistence
                 await DbConnection.QueryAsync<PrescriptionTimesTableSchema.PrescriptionTimeRecord>(sql, new { prescriptionId });
             return result;
         }
+
+        public async Task DeleteByPrescriptionIdAsync(Guid prescriptionId)
+        {
+            var sql = @$"
+                DELETE FROM [{_prescriptionTimesTableSchema.Schema}].[{_prescriptionTimesTableSchema.TableName}]
+                WHERE PrescriptionId = @prescriptionId
+            ";
+            await DbConnection.ExecuteAsync(sql, new { prescriptionId });
+        }
     }
 }

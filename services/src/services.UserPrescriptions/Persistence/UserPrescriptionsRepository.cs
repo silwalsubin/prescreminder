@@ -21,7 +21,7 @@ namespace services.UserPrescriptions.Persistence
             await DbConnection.InsertAsync(record);
         }
 
-        public async Task<IEnumerable<UserPrescriptionsTableSchema.UserPrescriptionRecord>> GetAsync(Guid userId)
+        public async Task<IEnumerable<UserPrescriptionsTableSchema.UserPrescriptionRecord>> GetByUserIdAsync(Guid userId)
         {
             var sql = @$"
                 SELECT * FROM [{_userPrescriptionsTableSchema.Schema}].[{_userPrescriptionsTableSchema.TableName}]
@@ -30,6 +30,15 @@ namespace services.UserPrescriptions.Persistence
             var result =
                 await DbConnection.QueryAsync<UserPrescriptionsTableSchema.UserPrescriptionRecord>(sql, new { userId });
             return result;
+        }
+
+        public async Task DeleteAsync(Guid prescriptionId)
+        {
+            var sql = @$"
+                DELETE FROM [{_userPrescriptionsTableSchema.Schema}].[{_userPrescriptionsTableSchema.TableName}]
+                WHERE PrescriptionId = @prescriptionId
+            ";
+            await DbConnection.ExecuteAsync(sql, new { prescriptionId });
         }
     }
 }

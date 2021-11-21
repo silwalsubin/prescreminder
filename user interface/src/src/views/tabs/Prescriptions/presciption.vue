@@ -9,18 +9,21 @@
       </ion-text>
     </div>
     <div class="prescription-actions">
-            <ion-button
-        fill="clear"
-        color="success"
-      >
-        <ion-icon :icon="createOutline" />
-      </ion-button>
-      <ion-button
-        fill="clear"
-        color="danger"
-      >
-        <ion-icon :icon="trashOutline" />
-      </ion-button>
+      <div class="precription-actions-buttons">
+        <ion-button
+          fill="clear"
+          color="success"
+        >
+          <ion-icon :icon="createOutline" />
+        </ion-button>
+        <ion-button
+          fill="clear"
+          color="danger"
+          @click="handleDelete"
+        >
+          <ion-icon :icon="trashOutline" />
+        </ion-button>
+      </div>
     </div>
   </div>
 </template>
@@ -32,13 +35,39 @@ import {
   trashOutline,
 } from 'ionicons/icons';
 
+import { useStore } from '@/store/store';
+
+import {
+  IonButton,
+  IonIcon,
+  IonText,
+  toastController,
+} from '@ionic/vue';
+
 export default {
-  components: { },
+  components: {
+    IonButton,
+    IonIcon,
+    IonText,
+  },
   props: {
     prescription: { type: PrescriptionViewModal, required: true }
   },
-  setup() {
+  setup(props) {
+    const store = useStore();
+
+    const handleDelete = async () => {
+      await store.dispatch('deletePrescription', props.prescription.prescriptionId);
+      const toast = await toastController.create({
+        message: `${props.prescription.name} ${props.prescription.quantity} deleted successfully`,
+        duration: 2000,
+        color: "success", 
+        animated: true
+      });
+      toast.present();
+    }
     return {
+      handleDelete,
       createOutline,
       trashOutline,
     }
@@ -48,9 +77,6 @@ export default {
 
 <style scoped>
 .prescription-card {
-  /* padding: 5px; */
-  /* width: 100%; */
-  /* background-color: grey; */
   display: flex;
   margin-bottom: 10px;
   border-radius: 10px;
@@ -64,5 +90,10 @@ export default {
 
 .prescription-actions {
   flex: 1;
+}
+
+.precription-actions-buttons {
+  max-width: 50px;
+  float: right;
 }
 </style>

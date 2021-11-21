@@ -26,7 +26,7 @@ namespace services.UserPrescriptions.WebApi
         public async Task<IEnumerable<PrescriptionViewModal>> Get()
         {
             var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
-            var prescriptionRecords = await _userPrescriptionsRepository.GetAsync(userId);
+            var prescriptionRecords = await _userPrescriptionsRepository.GetByUserIdAsync(userId);
             var result = new List<PrescriptionViewModal>();
             foreach (var x in prescriptionRecords)
             {
@@ -51,6 +51,17 @@ namespace services.UserPrescriptions.WebApi
                 result.Add(viewModal);
             }
             return result;
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
+            var prescriptionRecord = (await _userPrescriptionsRepository.GetByUserIdAsync(userId)).Single(x => x.PrescriptionId == id);
+            await _prescriptionTimesRepository.DeleteByPrescriptionIdAsync(prescriptionRecord.PrescriptionId);
+            await _userPrescriptionsRepository.DeleteAsync(prescriptionRecord.PrescriptionId);
+            return Ok();
         }
 
         [HttpPost]
