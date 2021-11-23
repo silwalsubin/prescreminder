@@ -28,6 +28,7 @@ export const store = createStore<State>({
     },
     loadPrescriptions({commit}) {
       return httpClient.get('/userPrescription').then(response => {
+        console.log(response.data);
         commit('setPrescriptions', response.data);
       })
     },
@@ -41,6 +42,11 @@ export const store = createStore<State>({
         commit('deletePrescription', prescriptionId);
       })
     },
+    updatePrescription({commit}, payload){
+      return httpClient.post(`/userPrescription/${payload.prescriptionId}`, payload.viewModal).then(() => {
+        commit('updatePrescription', payload.viewModal);
+      })
+    },
     logOut() {
       removeBearerToken();
     }
@@ -52,6 +58,10 @@ export const store = createStore<State>({
     deletePrescription(state, prescriptionId){
       const index = state.prescriptions.findIndex(x => x.prescriptionId === prescriptionId);
       state.prescriptions.splice(index, 1);
+    },
+    updatePrescription(state, payload){
+      const index = state.prescriptions.findIndex(x => x.prescriptionId === payload.prescriptionId);
+      state.prescriptions[index] = payload;
     }
   },
   getters: {

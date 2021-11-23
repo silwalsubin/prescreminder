@@ -2,7 +2,7 @@
   <div>
     <ion-header>
       <ion-toolbar>
-        <ion-title>{{ title }}</ion-title>
+        <ion-title>{{ prescriptionId ? 'Edit Prescription' : 'Add Prescription' }}</ion-title>
         <ion-button 
           slot="end"
           fill="clear"
@@ -13,9 +13,9 @@
         </ion-button>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true" :scrollY="true">
+    <ion-content :fullscreen="true" slot="fixed">
       <input-field
-        v-model:inputValue="form.name"
+        v-model:inputValue="form.name" 
         label="Name of medication"
         placeholder="Required"
         :disabled="formDisabled"
@@ -51,7 +51,9 @@
         :min="String(new Date().toISOString().split('T')[0])"
       />
       <div class="medication-intake-items">
-        <h5>Medication intake times</h5>
+        <ion-text color="medium">
+          <h5>Medication intake times</h5>
+        </ion-text>
         <ion-button
           color="success"
           shape="round"
@@ -64,14 +66,17 @@
       </div>
 
       <div class="time-of-day-container" v-for="(timeOfDay, index) in form.timesOfDay" :key="timeOfDay.id">
-        <a>
+        <ion-button
+          fill="outline"
+          color="medium"
+        > 
           <time-picker
             :hour="timeOfDay.hour"
             :minute="timeOfDay.minute"
             @input="handleTimeOfDayChange($event, index)"
             :disabled="formDisabled"
           />
-        </a>
+        </ion-button>
         <ion-button
           v-if="form.timesOfDay.length > 1"
           shape="round"
@@ -91,7 +96,7 @@
         :disabled="!isFormValid || formDisabled"
         @click="handleConfirm"
       >
-      Add Prescription
+      Save
       </ion-button>
     </ion-content>
   </div>
@@ -104,6 +109,7 @@ import {
   IonHeader,
   IonTitle, 
   IonToolbar,
+  IonText,
 } from '@ionic/vue';
 import { ref, computed, onMounted } from 'vue'
 import TimePicker from './time-picker.vue';
@@ -129,13 +135,14 @@ export default {
     IonButton, 
     IonContent,
     IonHeader,
-    IonTitle, 
+    IonTitle,
+    IonText,
     IonToolbar,
     TimePicker,
   },
   props: {
-    title: { type: String, required: true },
     isVisible: { type: Boolean, required: true },
+    prescriptionId: { type: String, required: false },
   },
   setup(props, {emit}) {
     const store = useStore();
@@ -165,10 +172,17 @@ export default {
 
     const handleConfirm = async () => {
       formDisabled.value = true;
-      await store.dispatch('addPrescription', form.value);
+      if (props.prescriptionId){
+        await store.dispatch('updatePrescription', {
+          prescriptionId: props.prescriptionId,
+          viewModal: form.value
+        });
+      } else {
+        await store.dispatch('addPrescription', form.value);
+      }
       formDisabled.value = false;
       const toast = await toastController.create({
-        message: 'Prescription added successfully',
+        message: 'Saved successfully',
         duration: 2000,
         color: "success", 
         animated: true
@@ -178,7 +192,13 @@ export default {
     }
 
     onMounted(() => {
-      form.value = store.getters.addPrescriptionPayload;
+      if (props.prescriptionId){
+        const prescription = store.getters.prescriptions.find(x => x.prescriptionId === props.prescriptionId);
+        console.log(prescription);
+        form.value = prescription;
+      } else {
+        form.value = store.getters.addPrescriptionPayload;
+      }
     })
 
     const handleCancel = () => {
@@ -209,6 +229,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding-right: 20px;
+  padding-left: 10px;
 }
 
 .medication-intake-items {

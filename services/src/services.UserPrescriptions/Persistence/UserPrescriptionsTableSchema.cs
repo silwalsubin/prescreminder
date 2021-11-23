@@ -1,6 +1,6 @@
 ﻿using contracts.Persistence;
+using Dapper.Contrib.Extensions;
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace services.UserPrescriptions.Persistence
 {
@@ -23,9 +23,10 @@ namespace services.UserPrescriptions.Persistence
         ";
         public Type Dto => typeof(UserPrescriptionRecord);
 
-        [Table("UserPrescriptions")]
+        [System.ComponentModel.DataAnnotations.Schema.Table("UserPrescriptions")]
         public class UserPrescriptionRecord : IGenericRecord
         {
+            [Key]
             public Guid PrescriptionId { get; set; }
             public Guid UserId { get; set; }
             public string Name { get; set; }

@@ -3,7 +3,12 @@
     <tab-header header-title="My Prescriptions"/>
     <ion-content :fullscreen="true">
       <add-prescription-button />
-      <div class="prescriptions-tab-container">
+      <div class="no-prescriptions" v-if="prescriptions.length === 0">
+        <ion-text color="medium">
+        You do not have any prescriptions. Click the + button to create one.
+        </ion-text>
+      </div>
+      <div v-else class="prescriptions-tab-container">
         <prescription 
           v-for="prescription in prescriptions" 
           :key="prescription.prescriptionId"
@@ -18,6 +23,7 @@
 import { 
   IonContent,
   IonPage,
+  IonText,
 } from '@ionic/vue';
 
 import AddPrescriptionButton from '@/components/add-presciption-button.vue'
@@ -31,6 +37,7 @@ export default  {
     AddPrescriptionButton,
     IonContent,
     IonPage,
+    IonText,
     Prescription,
     TabHeader,
   },
@@ -53,5 +60,15 @@ export default  {
 <style scoped>
 .prescriptions-tab-container {
   padding: 20px;
+}
+
+.no-prescriptions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
 }
 </style>

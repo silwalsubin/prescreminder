@@ -21,6 +21,11 @@ namespace services.UserPrescriptions.Persistence
             await DbConnection.InsertAsync(record);
         }
 
+        public async Task UpdateAsync(UserPrescriptionsTableSchema.UserPrescriptionRecord record)
+        {
+            await DbConnection.UpdateAsync(record);
+        }
+
         public async Task<IEnumerable<UserPrescriptionsTableSchema.UserPrescriptionRecord>> GetByUserIdAsync(Guid userId)
         {
             var sql = @$"

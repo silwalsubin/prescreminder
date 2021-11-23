@@ -4,7 +4,7 @@
       <ion-text color="dark">
         <h4>{{prescription.name}}</h4>
       </ion-text>
-      <ion-text color="dark">
+      <ion-text color="medium">
         <p>{{prescription.quantity}}</p>
       </ion-text>
     </div>
@@ -13,6 +13,7 @@
         <ion-button
           fill="clear"
           color="success"
+          @click="setOpen(true)"
         >
           <ion-icon :icon="createOutline" />
         </ion-button>
@@ -23,6 +24,16 @@
         >
           <ion-icon :icon="trashOutline" />
         </ion-button>
+        <ion-modal
+          :is-open="isOpenRef"
+          @didDismiss="setOpen(false)"
+        >
+          <Modal 
+            :prescriptionId="prescription.prescriptionId"
+            @close="setOpen(false)"
+            :isVisible="isOpenRef"
+          />
+        </ion-modal>
       </div>
     </div>
   </div>
@@ -30,15 +41,18 @@
 
 <script>
 import PrescriptionViewModal from '@/store/view-models/prescription-view-modal'
+import Modal from '@/components/add-edit-prescription-model.vue'
 import {
   createOutline,
   trashOutline,
 } from 'ionicons/icons';
 
 import { useStore } from '@/store/store';
+import { ref } from 'vue';
 
 import {
   IonButton,
+  IonModal,
   IonIcon,
   IonText,
   toastController,
@@ -46,8 +60,10 @@ import {
 
 export default {
   components: {
+    Modal,
     IonButton,
     IonIcon,
+    IonModal,
     IonText,
   },
   props: {
@@ -55,7 +71,8 @@ export default {
   },
   setup(props) {
     const store = useStore();
-
+    const isOpenRef = ref(false);
+    const setOpen = (state) => isOpenRef.value = state;
     const handleDelete = async () => {
       await store.dispatch('deletePrescription', props.prescription.prescriptionId);
       const toast = await toastController.create({
@@ -67,6 +84,8 @@ export default {
       toast.present();
     }
     return {
+      isOpenRef, 
+      setOpen,  
       handleDelete,
       createOutline,
       trashOutline,

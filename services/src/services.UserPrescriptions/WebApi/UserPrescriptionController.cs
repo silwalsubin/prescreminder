@@ -52,6 +52,44 @@ namespace services.UserPrescriptions.WebApi
             return result;
         }
 
+        [HttpPost]
+        [Route("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] PrescriptionViewModal model)
+        {
+            var prescriptionId = id;
+            var userPrescriptionRecord = new UserPrescriptionsTableSchema.UserPrescriptionRecord
+            {
+                UserId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId),
+                PrescriptionId = prescriptionId,
+                CreatedDateUtc = DateTime.UtcNow,
+                ModifiedDateUtc = DateTime.UtcNow,
+                StartDateUtc = model.StartDate,
+                CompleteDateUtc = model.CompleteDate,
+                ExpirationDateUtc = model.ExpirationDate,
+                Name = model.Name,
+                Quantity = model.Quantity,
+            };
+
+            var uniquePrescriptionTimeRecords = model.TimesOfDay.Select(x => new { x.Hour, x.Minute }).Distinct().Select(x =>
+                new PrescriptionTimesTableSchema.PrescriptionTimeRecord
+                {
+                    PrescriptionId = prescriptionId,
+                    PrescriptionTimeId = Guid.NewGuid(),
+                    Hour = x.Hour,
+                    Minute = x.Minute,
+                    Second = 0
+                });
+
+            await _userPrescriptionsRepository.UpdateAsync(userPrescriptionRecord);
+            await _prescriptionTimesRepository.DeleteByPrescriptionIdAsync(id);
+            foreach (var prescriptionRecord in uniquePrescriptionTimeRecords)
+            {
+                await _prescriptionTimesRepository.InsertAsync(prescriptionRecord);
+            }
+
+            return Ok();
+        }
+
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> Delete(Guid id)

@@ -13,8 +13,10 @@
 
 <script lang="ts">
 import {
+  IonBadge,
   IonButton,
   IonIcon,
+  IonLabel,
 } from '@ionic/vue';
 
 import {
@@ -27,8 +29,10 @@ import {
 export default  {
   name: 'LogIn',
   components: {
+    IonBadge,
     IonButton,
     IonIcon,
+    IonLabel,
   },
   setup() {
     const handleClick = () => {

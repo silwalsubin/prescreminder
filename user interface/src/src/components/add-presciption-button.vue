@@ -6,11 +6,9 @@
   </ion-fab>
   <ion-modal
     :is-open="isOpenRef"
-    css-class="my-custom-class"
     @didDismiss="setOpen(false)"
   >
     <Modal 
-      title="Add Prescription"
       @close="setOpen(false)"
       :isVisible="isOpenRef"
     />
@@ -20,10 +18,10 @@
 <script>
 import { add } from 'ionicons/icons';
 import { IonModal, IonFab, IonFabButton, IonIcon, } from '@ionic/vue';
-import { defineComponent, ref } from 'vue';
-import Modal from './add-prescription-model.vue'
+import { ref } from 'vue';
+import Modal from './add-edit-prescription-model.vue'
 
-export default defineComponent({
+export default {
   components: { IonModal, Modal, IonFab, IonFabButton, IonIcon, },
   setup() {
     const isOpenRef = ref(false);
@@ -34,5 +32,5 @@ export default defineComponent({
       setOpen,  
     }
   }
-});
+};
 </script>

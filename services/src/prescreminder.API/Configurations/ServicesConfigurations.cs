@@ -1,4 +1,6 @@
-﻿using infrastructure.Database;
+﻿using contracts.Persistence;
+using Dapper;
+using infrastructure.Database;
 using infrastructure.Database.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using middleware.Authentication;
@@ -23,6 +25,7 @@ namespace prescreminder.API.Configurations
             UserPrescriptionServiceConfiguration.Configure(services);
             AuthenticationMiddleWareConfiguration.Configure(services);
             DatabaseInfrastructureConfiguration.Configure(services);
+            SqlMapper.AddTypeHandler(new DateTimeHandler());
         }
     }
 }
