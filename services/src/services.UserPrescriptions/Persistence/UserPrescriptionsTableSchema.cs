@@ -26,7 +26,7 @@ namespace services.UserPrescriptions.Persistence
         [System.ComponentModel.DataAnnotations.Schema.Table("UserPrescriptions")]
         public class UserPrescriptionRecord : IGenericRecord
         {
-            [Key]
+            [ExplicitKey]
             public Guid PrescriptionId { get; set; }
             public Guid UserId { get; set; }
             public string Name { get; set; }
