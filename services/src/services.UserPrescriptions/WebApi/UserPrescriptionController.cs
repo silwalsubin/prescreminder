@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using middleware.Authentication;
-using services.UserPrescriptions.Payloads;
+using services.UserPrescriptions.Domain;
 using services.UserPrescriptions.Persistence;
 using System;
 using System.Collections.Generic;
@@ -23,11 +23,11 @@ namespace services.UserPrescriptions.WebApi
         }
 
         [HttpGet]
-        public async Task<IEnumerable<PrescriptionViewModal>> Get()
+        public async Task<IEnumerable<PrescriptionViewModel>> Get()
         {
             var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
             var prescriptionRecords = await _userPrescriptionsRepository.GetByUserIdAsync(userId);
-            var result = new List<PrescriptionViewModal>();
+            var result = new List<PrescriptionViewModel>();
             foreach (var x in prescriptionRecords)
             {
                 var prescriptionTimes = (await _prescriptionTimesRepository.GetAsync(x.PrescriptionId)).Select(t => new TimeOfDay
@@ -36,7 +36,7 @@ namespace services.UserPrescriptions.WebApi
                     Minute = t.Minute,
                 }).ToList();
 
-                var viewModal = new PrescriptionViewModal
+                var viewModal = new PrescriptionViewModel
                 {
                     PrescriptionId = x.PrescriptionId,
                     Name = x.Name,
@@ -54,7 +54,7 @@ namespace services.UserPrescriptions.WebApi
 
         [HttpPost]
         [Route("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] PrescriptionViewModal model)
+        public async Task<IActionResult> Update(Guid id, [FromBody] PrescriptionViewModel model)
         {
             var prescriptionId = id;
             var userPrescriptionRecord = new UserPrescriptionsTableSchema.UserPrescriptionRecord

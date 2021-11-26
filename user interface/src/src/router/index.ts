@@ -41,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'dashboard',
-        component: () => import('@/views/tabs/Dashboard.vue'),
+        component: () => import('@/views/tabs/Dashboard/index.vue'),
         name: RouteName.DashboardTab
       },
       {

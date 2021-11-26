@@ -1,15 +1,17 @@
 import { InjectionKey } from 'vue';
-import { createStore, useStore as baseUseStore, Store, MutationTree } from 'vuex';
+import { createStore, useStore as baseUseStore, Store } from 'vuex';
 import httpClient from '@/store/http-client';
 import { removeBearerToken, setBearerToken } from '@/bearer-token-service';
 import AddPrescriptionPayload from './payloads/add-prescription-payload';
 import PrescriptionViewModal from './view-models/prescription-view-modal';
+import MedicationInfoViewModel from './view-models/medication-info-view-model';
 import _ from 'lodash';
 
 
 export interface State {
   addPrescriptionPayload: AddPrescriptionPayload;
   prescriptions: PrescriptionViewModal[];
+  medicationsToday: MedicationInfoViewModel[];
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
@@ -17,7 +19,8 @@ export const key: InjectionKey<Store<State>> = Symbol()
 export const store = createStore<State>({
   state: {
     addPrescriptionPayload: new AddPrescriptionPayload(),
-    prescriptions: []
+    prescriptions: [],
+    medicationsToday: [],
   },
   actions: {
     logIn(_, payload) {
@@ -26,9 +29,13 @@ export const store = createStore<State>({
         setBearerToken(bearerToken);
       })
     },
+    loadMedicationsToday({commit}){
+      return httpClient.get('/userMedicationToday').then(response => {
+        commit('updateMedicationsToday', response.data);
+      })
+    },
     loadPrescriptions({commit}) {
       return httpClient.get('/userPrescription').then(response => {
-        console.log(response.data);
         commit('setPrescriptions', response.data);
       })
     },
@@ -62,11 +69,15 @@ export const store = createStore<State>({
     updatePrescription(state, payload){
       const index = state.prescriptions.findIndex(x => x.prescriptionId === payload.prescriptionId);
       state.prescriptions[index] = payload;
+    },
+    updateMedicationsToday(state, payload){
+      state.medicationsToday = payload;
     }
   },
   getters: {
     addPrescriptionPayload: state => _.cloneDeep(state.addPrescriptionPayload),
-    prescriptions: state => state.prescriptions
+    prescriptions: state => _.cloneDeep(state.prescriptions),
+    medicationsToday: state => _.cloneWith(state.medicationsToday),
   }
 })
 

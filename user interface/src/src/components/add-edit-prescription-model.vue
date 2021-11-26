@@ -194,7 +194,6 @@ export default {
     onMounted(() => {
       if (props.prescriptionId){
         const prescription = store.getters.prescriptions.find(x => x.prescriptionId === props.prescriptionId);
-        console.log(prescription);
         form.value = prescription;
       } else {
         form.value = store.getters.addPrescriptionPayload;
