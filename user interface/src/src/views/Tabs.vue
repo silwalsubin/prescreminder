@@ -3,7 +3,7 @@
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
-        <ion-tab-button tab="tab1" href="/tabs/dashboard" @click="initiateDashboard">
+        <ion-tab-button tab="tab1" href="/tabs/dashboard">
           <ion-icon :icon="homeOutline" />
         </ion-tab-button>
           
@@ -34,18 +34,11 @@ import {
   triangle 
 } from 'ionicons/icons';
 
-import { useStore } from '@/store/store';
-
 export default {
   name: 'Tabs',
   components: { IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage, IonRouterOutlet },
   setup() {
-    const store = useStore();
-    const initiateDashboard = async () => {
-      await store.dispatch('loadMedicationsToday');
-    }
     return {
-      initiateDashboard,
       homeOutline,
       listCircleOutline,
       personCircle,

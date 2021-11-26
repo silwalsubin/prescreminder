@@ -1,8 +1,7 @@
 <template>
-  <ion-item>
-    <ion-label position="stacked">
-      {{ label }}
-    </ion-label>
+  <form-item
+    :label="label"
+  >
     <ion-datetime
       v-model="vModel"
       display-format="MM/DD/YYYY"
@@ -10,25 +9,23 @@
       :min="min"
       :max="max"
     />
-  </ion-item>
+  </form-item>
 </template>
 
 <script>
 import {
   IonDatetime, 
-  IonItem,
-  IonLabel,
 } from '@ionic/vue';
 
 import moment from 'moment';
 import { computed } from 'vue'
+import FormItem from '@/components/form-elements/form-item.vue';
 
 export default {
   name: 'datePicker',
   components: {
+    FormItem,
     IonDatetime,
-    IonItem,
-    IonLabel,
   },
   props: {
     inputValue: { type: String },

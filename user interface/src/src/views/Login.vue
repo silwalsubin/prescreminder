@@ -7,23 +7,17 @@
     </ion-header>
     <ion-content :fullscreen="true" class="log-in-container">
       <div>
-        <ion-item>
-          <ion-label><ion-icon :icon="mail" /></ion-label>
-          <ion-input
-            v-model="form.emailAddressOrUserName" 
-            placeholder="Email Address or UserName*" 
-            :clear-input="true"
-          />
-        </ion-item>
-        <ion-item>
-          <ion-label><ion-icon :icon="key" /></ion-label>
-          <ion-input
-            v-model="form.password" 
-            placeholder="Password*" 
-            type="password" 
-            :clear-input="true"
-          />
-        </ion-item>
+        <input-field
+          v-model:inputValue="form.emailAddressOrUserName"
+          label="Email Address or UserName"
+          placeholder="Required"
+        />
+        <input-field
+          v-model:inputValue="form.password"
+          label="Password"
+          placeholder="Required"
+          type="password"
+        />
         <br>
         <div class="log-in-buttons">
           <ion-button 
@@ -35,16 +29,15 @@
           >
           Log In
           </ion-button>
-          <ion-router-link href="/">
-            <ion-button 
-              size="large" 
-              shape="round" 
-              color="light"
-              :disabled="false"
-            >
-            Cancel
-            </ion-button>
-          </ion-router-link>
+          <ion-button 
+            size="large" 
+            shape="round" 
+            color="light"
+            :disabled="false"
+            @click="handleCancel"
+          >
+          Cancel
+          </ion-button>
         </div>
       </div>
     </ion-content>
@@ -56,35 +49,24 @@ import {
   IonButton,
   IonContent, 
   IonHeader,
-  IonIcon,
-  IonItem,
-  IonInput,
-  IonLabel,
   IonPage,
   IonTitle, 
   IonToolbar,
 } from '@ionic/vue';
 
-import {
-  key,
-  mail,
-} from 'ionicons/icons';
-
 import { ref, computed } from 'vue'
 import { useStore } from '@/store/store'
 import { useRouter } from 'vue-router';
 import { RouteName } from '@/router/route-names';
+import InputField from '@/components/form-elements/input-field.vue'
 
 export default  {
   name: 'LogIn',
   components: {
+    InputField,
     IonButton,
     IonContent,
     IonHeader,
-    IonIcon,
-    IonItem,
-    IonInput,
-    IonLabel,
     IonPage,
     IonTitle, 
     IonToolbar, 
@@ -105,13 +87,19 @@ export default  {
       try {
         await store.dispatch('logIn', form.value);
         router.push({
-          name: RouteName.DashboardTabDefault
+          name: RouteName.DashboardTab
         })
       } catch (error) {
         console.log(error)
       } finally {
         inProgress.value = false;
       }
+    }
+
+    const handleCancel = () => {
+      router.push({
+        name: RouteName.WelcomePage
+      })
     }
 
     const canLogIn = computed(() => {
@@ -123,8 +111,7 @@ export default  {
       asyncLogin,
       canLogIn,
       form,
-      key,
-      mail,
+      handleCancel,
     }
   }
 }

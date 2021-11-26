@@ -3,12 +3,22 @@
     <div>
       <h1 class="welcome-message">Welcome to Prescreminder</h1>
       <div class="welcome-buttons">
-        <ion-router-link href="/register">
-          <ion-button size="large" shape="round" color="success">Register</ion-button>
-        </ion-router-link>
-        <ion-router-link href="/login">
-          <ion-button size="large" shape="round" color="primary">Sign In</ion-button>
-        </ion-router-link>
+        <ion-button 
+          size="large" 
+          shape="round" 
+          color="success"
+          @click="handleRegister"
+        >
+        Register
+        </ion-button>
+        <ion-button 
+          size="large" 
+          shape="round" 
+          color="primary"
+          @click="handleLogin"
+        >
+        Sign In
+        </ion-button>
       </div>
     </div>
   </ion-page>
@@ -20,12 +30,35 @@ import {
     IonPage, 
 } from '@ionic/vue';
 
+import { useRouter } from 'vue-router';
+import { RouteName } from '@/router/route-names';
+
 export default {
   name: 'Welcome',
   components: { 
     IonButton, 
     IonPage, 
   },
+  setup() {
+    const router = useRouter();
+
+    const handleLogin = () => {
+      router.push({
+        name: RouteName.LogInPage
+      })
+    }
+
+    const handleRegister = () => {
+      router.push({
+        name: RouteName.RegisterPage
+      })
+    }
+
+    return {
+      handleLogin,
+      handleRegister,
+    }
+  }
 }
 </script>
 

@@ -3,14 +3,7 @@
     <tab-header header-title="Today's Medication List"/>
     <ion-content :fullscreen="true">  
       <div class="dashboard-tab-container">
-        <ion-list>
-          <ion-item-sliding v-for="medicationToday in medicationsToday" :key="medicationToday">
-              <medication-info :medicationInfo="medicationToday" />
-              <ion-item-options side="end">
-                <ion-item-option>Done</ion-item-option>
-              </ion-item-options>
-          </ion-item-sliding>
-        </ion-list>
+        <medication-info :medicationInfo="medicationToday" v-for="medicationToday in medicationsToday" :key="medicationToday"/>
       </div>
     </ion-content>
   </ion-page>
@@ -22,10 +15,6 @@ import { useStore } from '@/store/store'
 import { onMounted, computed } from 'vue'
 import MedicationInfo from './medication-info.vue'
 import {
-  IonList,
-  IonItemSliding,
-  IonItemOption,
-  IonItemOptions,
   IonPage,
   IonContent,
 } from '@ionic/vue';
@@ -36,10 +25,6 @@ export default  {
   components: { 
     IonContent, 
     TabHeader, 
-    IonItemSliding,
-    IonItemOption,
-    IonItemOptions,
-    IonList,
     IonPage, 
     MedicationInfo,
   },

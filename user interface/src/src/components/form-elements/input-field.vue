@@ -1,32 +1,29 @@
 <template>
-  <ion-item>
-    <ion-label position="stacked" >
-      {{ label }}
-    </ion-label>
+  <form-item
+    :label="label"
+  >
     <ion-input
       v-model="vModel" 
       :placeholder="placeholder" 
       :clear-input="true"
       :type="type"
     />
-  </ion-item>
+ </form-item>
 </template>
 
 <script>
 import {
   IonInput, 
-  IonItem,
-  IonLabel,
 } from '@ionic/vue';
 
 import { computed } from 'vue'
+import FormItem from '@/components/form-elements/form-item.vue';
 
 export default {
   name: 'inputField',
   components: {
+    FormItem,
     IonInput,
-    IonItem,
-    IonLabel,
   },
   props: {
     inputValue: { type: String },
