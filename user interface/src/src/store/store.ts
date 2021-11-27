@@ -5,6 +5,8 @@ import { removeBearerToken, setBearerToken } from '@/bearer-token-service';
 import AddPrescriptionPayload from './payloads/add-prescription-payload';
 import PrescriptionViewModal from './view-models/prescription-view-modal';
 import MedicationInfoViewModel from './view-models/medication-info-view-model';
+import UserHistoryViewModel from './view-models/user-history-view-model';
+import MedicationCheckListItem from './view-models/medication-check-list-item';
 import _ from 'lodash';
 
 
@@ -12,6 +14,7 @@ export interface State {
   addPrescriptionPayload: AddPrescriptionPayload;
   prescriptions: PrescriptionViewModal[];
   medicationsToday: MedicationInfoViewModel[];
+  userHistories: UserHistoryViewModel[];
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
@@ -21,6 +24,7 @@ export const store = createStore<State>({
     addPrescriptionPayload: new AddPrescriptionPayload(),
     prescriptions: [],
     medicationsToday: [],
+    userHistories: [],
   },
   actions: {
     logIn(_, payload) {
@@ -54,6 +58,9 @@ export const store = createStore<State>({
         commit('updatePrescription', payload.viewModal);
       })
     },
+    updateMedicationTaken({commit}, payload){
+      commit('updateMedicationTaken', payload);
+    },
     logOut() {
       removeBearerToken();
     }
@@ -72,12 +79,47 @@ export const store = createStore<State>({
     },
     updateMedicationsToday(state, payload){
       state.medicationsToday = payload;
+    },
+    updateMedicationTaken(state, payload){
+      const index = state.userHistories.findIndex(y => 
+        y.name === payload.name &&
+        y.quantity === payload.quantity &&
+        y.hour === payload.hour && 
+        y.minute === payload.minute
+      );
+
+      if (index === -1)
+      {
+        state.userHistories.push(new UserHistoryViewModel(
+          payload.name, 
+          payload.quantity,
+          payload.hour,
+          payload.minute
+        ))
+      } else {
+        state.userHistories.splice(index, 1);
+      }
     }
   },
   getters: {
     addPrescriptionPayload: state => _.cloneDeep(state.addPrescriptionPayload),
     prescriptions: state => _.cloneDeep(state.prescriptions),
-    medicationsToday: state => _.cloneWith(state.medicationsToday),
+    medicationCheckList: state => {
+      const result = state.medicationsToday.map(x => 
+        new MedicationCheckListItem(
+          x.name, 
+          x.quantity, 
+          x.hour, 
+          x.minute,
+          state.userHistories.findIndex(y => 
+            y.name === x.name &&
+            y.quantity === x.quantity &&
+            y.hour === x.hour && 
+            y.minute === x.minute
+          ) !== -1
+        ));
+      return result;
+    }
   }
 })
 

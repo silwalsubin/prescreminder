@@ -38,7 +38,7 @@ import { useStore } from '@/store/store';
 
 export default {
   name: 'Tabs',
-  components: { IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage, IonRouterOutlet },
+  components: { IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage, IonRouterOutlet, },
   setup() {
     const store = useStore();
     const initiateDashboard = async () => {

@@ -1,14 +1,21 @@
 <template>
-  <ion-item lines="full"  class="medication-info-ion-item">
+  <ion-item lines="full" class="medication-info-ion-item">
     <div class="medication-info-item">
-      <ion-label color="dark" position="stacked">{{medicationInfo.name}} {{medicationInfo.quantity}}</ion-label>
-      <ion-text :color="medicationInfoColor">
+      <ion-label
+        :color="medicationInfo.taken ? 'medium': 'dark'" 
+        position="stacked"
+      >
+        {{medicationInfo.name}} {{medicationInfo.quantity}}
+      </ion-label>
+      <ion-text :color="medicationInfo.taken ? 'medium': medicationInfoColor">
         <p>
         {{humanizedTime}}
         </p>
       </ion-text>
     </div>
     <ion-toggle slot="end"
+      @ionChange="handleTakenChange"
+      :checked="medicationInfo.taken"
       color="success">
     </ion-toggle>
   </ion-item>
@@ -17,6 +24,7 @@
 <script>
 import { computed } from 'vue';
 import moment from 'moment';
+import { useStore } from '@/store/store'
 import MedicationInfoViewModel from '@/store/view-models/medication-info-view-model';
 import {
   IonItem,
@@ -36,21 +44,26 @@ export default {
     IonToggle,
   },
   setup(props) {
+    const store = useStore();
+
     const medicationInfoDateTimeMoment = computed(() => {
       return moment().set('hour', props.medicationInfo.hour)
       .set('minute', props.medicationInfo.minute)
     })
     const humanizedTime = computed(() => {
-      return medicationInfoDateTimeMoment.value.fromNow();
+      return medicationInfoDateTimeMoment.value.format("hh:mm A");
     })
     const medicationInfoColor = computed(() => {
       const minutes = medicationInfoDateTimeMoment.value.diff(moment(), 'minutes');
       if (minutes <= -60) return "danger";
       if (minutes <= 0) return "warning";
-      if (minutes <= 60) return "primary";
-      else return "secondary";
+      else return "primary";
     })
+    const handleTakenChange = () => {
+      store.dispatch('updateMedicationTaken', props.medicationInfo);
+    }
     return {
+      handleTakenChange,
       humanizedTime,
       medicationInfoColor,
     }
