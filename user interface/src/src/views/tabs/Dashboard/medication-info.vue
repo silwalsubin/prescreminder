@@ -2,12 +2,12 @@
   <ion-item lines="full" class="medication-info-ion-item">
     <div class="medication-info-item">
       <ion-label
-        :color="medicationInfo.taken ? 'medium': 'dark'" 
+        :color="isTaken ? 'medium': 'dark'" 
         position="stacked"
       >
         {{medicationInfo.name}} {{medicationInfo.quantity}}
       </ion-label>
-      <ion-text :color="medicationInfo.taken ? 'medium': medicationInfoColor">
+      <ion-text :color="isTaken ? 'medium': medicationInfoColor">
         <p>
         {{humanizedTime}}
         </p>

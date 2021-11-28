@@ -63,16 +63,19 @@ export const store = createStore<State>({
     addPrescription({dispatch}, payload) {
       return httpClient.post('/userPrescription/add', payload).then(() => {
         dispatch('loadPrescriptions');
+        dispatch('loadMedicationsToday');
       });
     },
-    deletePrescription({commit}, prescriptionId) {
+    deletePrescription({commit, dispatch}, prescriptionId) {
       return httpClient.delete(`/userPrescription/${prescriptionId}`).then(() => {
         commit('deletePrescription', prescriptionId);
+        dispatch('loadMedicationsToday');
       })
     },
-    updatePrescription({commit}, payload){
+    updatePrescription({commit, dispatch}, payload){
       return httpClient.post(`/userPrescription/${payload.prescriptionId}`, payload.viewModal).then(() => {
         commit('updatePrescription', payload.viewModal);
+        dispatch('loadMedicationsToday');
       })
     },
     updateMedicationTaken({commit}, payload: MedicationCheckListItem){
