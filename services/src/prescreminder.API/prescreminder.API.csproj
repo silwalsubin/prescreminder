@@ -16,6 +16,7 @@
     <ProjectReference Include="..\infrastructure.Database\infrastructure.Database.csproj" />
     <ProjectReference Include="..\middleware.Authentication\middleware.Authentication.csproj" />
     <ProjectReference Include="..\prescreminder.Utilities\prescreminder.Utilities.csproj" />
+    <ProjectReference Include="..\services.UserMedicationIntakeHistories\services.UserMedicationIntakeHistories.csproj" />
     <ProjectReference Include="..\services.UserPrescriptions\services.UserPrescriptions.csproj" />
     <ProjectReference Include="..\services.Users\services.Users.csproj" />
   </ItemGroup>

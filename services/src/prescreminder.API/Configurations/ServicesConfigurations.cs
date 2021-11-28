@@ -4,6 +4,7 @@ using infrastructure.Database;
 using infrastructure.Database.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using middleware.Authentication;
+using services.UserMedicationIntakeHistories;
 using services.UserPrescriptions;
 using services.Users;
 using System;
@@ -24,6 +25,7 @@ namespace prescreminder.API.Configurations
             UserServiceConfiguration.Configure(services);
             UserPrescriptionServiceConfiguration.Configure(services);
             AuthenticationMiddleWareConfiguration.Configure(services);
+            UserMedicationIntakeHistoriesServiceConfiguration.Configure(services);
             DatabaseInfrastructureConfiguration.Configure(services);
             SqlMapper.AddTypeHandler(new DateTimeHandler());
         }

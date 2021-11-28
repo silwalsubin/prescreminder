@@ -1,15 +1,15 @@
 export default class MedicationCheckListItem {
-  constructor(name: string, quantity: string, hour: number, minute: number, taken: boolean){
+  constructor(name: string, quantity: string, hour: number, minute: number, historyId: string|null){
     this.name = name;
     this.quantity = quantity;
     this.hour = hour;
     this.minute = minute;
-    this.taken = taken;
+    this.historyId = historyId;
   }
 
   name: string;
   quantity: string;
   hour: number;
   minute: number;
-  taken: boolean;
+  historyId: string|null;
 }

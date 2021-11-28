@@ -46,7 +46,7 @@ export default  {
   setup() {
     const store = useStore();
 
-    const medicationsToday = computed(() => store.getters.medicationCheckList);
+    const medicationsToday = computed(() => store.getters.medicationCheckListItems);
 
     onMounted(async () => {
       await store.dispatch('loadMedicationsToday');

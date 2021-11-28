@@ -15,7 +15,7 @@
     </div>
     <ion-toggle slot="end"
       @ionChange="handleTakenChange"
-      :checked="medicationInfo.taken"
+      :checked="isTaken"
       color="success">
     </ion-toggle>
   </ion-item>
@@ -62,7 +62,9 @@ export default {
     const handleTakenChange = () => {
       store.dispatch('updateMedicationTaken', props.medicationInfo);
     }
+    const isTaken = computed(() => props.medicationInfo.historyId !== null)
     return {
+      isTaken,
       handleTakenChange,
       humanizedTime,
       medicationInfoColor,
