@@ -3,9 +3,7 @@
 <br />
 <div align="center">
   <h3 align="center">Prescreminder</h3>
-  <p align="center">
-    SWDV 691: SOFTWARE DVLPMNT CAPSTONE
-  </p>
+
 </div>
 
 <!-- ABOUT THE PROJECT -->
