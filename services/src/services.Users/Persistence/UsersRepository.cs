@@ -1,7 +1,7 @@
 ﻿using contracts.Persistence;
 using Dapper;
 using Dapper.Contrib.Extensions;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,13 +34,13 @@ namespace services.Users.Persistence
             return result.SingleOrDefault();
         }
 
-        public async Task<IEnumerable<UsersTableSchema.UserRecord>> GetAll()
+        public async Task DeleteByUserId(Guid userId)
         {
             var sql = $@"
-                SELECT * FROM [{_usersTableSchema.Schema}].[{_usersTableSchema.TableName}]
-                WHERE EmailAddress  = @emailAddress";
-            var result = await DbConnection.QueryAsync<UsersTableSchema.UserRecord>(sql);
-            return result;
+                DELETE FROM [{_usersTableSchema.Schema}].[{_usersTableSchema.TableName}]
+                WHERE UserId = @userId
+            ";
+            await DbConnection.ExecuteAsync(sql, new { userId });
         }
 
         public async Task InsertAsync(UsersTableSchema.UserRecord record)

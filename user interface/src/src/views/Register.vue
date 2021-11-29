@@ -13,6 +13,7 @@
             v-model="form.emailAddress" 
             placeholder="Email Address*" 
             :clear-input="true"
+            :disabled="inProgress"
           />
         </ion-item>
         <ion-item>
@@ -21,6 +22,7 @@
             v-model="form.userName" 
             placeholder="Username*" 
             :clear-input="true"
+            :disabled="inProgress"
           />
         </ion-item>
         <ion-item>
@@ -30,15 +32,17 @@
             placeholder="Password*" 
             type="password" 
             :clear-input="true"
+            :disabled="inProgress"
           />
         </ion-item>
         <ion-item>
           <ion-label><ion-icon :icon="key" /></ion-label>
           <ion-input
-            v-model="form.confirmedPassword" 
+            v-model="form.confirmPassword" 
             placeholder="Confirm Password*"
             type="password"
             :clear-input="true"
+            :disabled="inProgress"
           />
         </ion-item>
         <ion-item>
@@ -47,6 +51,7 @@
             v-model="form.firstName"
             placeholder="First Name*"
             :clear-input="true"
+            :disabled="inProgress"
           />
         </ion-item>
         <ion-item>
@@ -55,6 +60,7 @@
             v-model="form.middleName" 
             placeholder="Middle Name"
             :clear-input="true"
+            :disabled="inProgress"
           />
         </ion-item>
         <ion-item>
@@ -63,6 +69,7 @@
             v-model="form.lastName" 
             placeholder="Last Name*"
             :clear-input="true"
+            :disabled="inProgress"
           />
         </ion-item>
         <ion-item>
@@ -71,26 +78,26 @@
             v-model="form.dateOfBirth"
             display-format="MM/DD/YYYY"
             placeholder="Date of Birth*"
+            :disabled="inProgress"
           />
         </ion-item>
         <br>
         <div class="register-buttons">
-          <ion-router-link href="/">
-            <ion-button 
-              size="large" 
-              shape="round" 
-              color="success"
-              :disabled="!canCreateAccount"
-            >
-            Create Account
-            </ion-button>
-          </ion-router-link>
+          <ion-button 
+            size="large" 
+            shape="round" 
+            color="success"
+            @click="asyncRegister"
+            :disabled="!canCreateAccount || inProgress"
+          >
+          Create Account
+          </ion-button>
           <ion-router-link href="/">
             <ion-button 
               size="large" 
               shape="round" 
               color="light"
-              :disabled="false"
+              :disabled="inProgress"
             >
             Cancel
             </ion-button>
@@ -124,6 +131,10 @@ import {
 } from 'ionicons/icons';
 
 import { ref, computed } from 'vue'
+import { useStore } from '@/store/store'
+import { useRouter } from 'vue-router';
+import { RouteName } from '@/router/route-names';
+import { notifyAsync, NotificationType } from '@/toast-notifications'
 
 export default  {
   name: 'Register',
@@ -141,13 +152,16 @@ export default  {
     IonToolbar, 
   },
   setup() {
+    const store = useStore();
+    const router = useRouter();
+    const inProgress = ref(false);
     const form = ref({
       emailAddress: '',
       userName: '',
       password: '',
-      confirmedPassword: '',
+      confirmPassword: '',
       firstName: '',
-      middleName: '',
+      middleName: null,
       lastName: '', 
       dateOfBirth: '',
     })
@@ -156,15 +170,33 @@ export default  {
       return form.value.emailAddress !== ''
               && form.value.userName !== ''
               && form.value.password !== ''
-              && form.value.confirmedPassword !== ''
+              && form.value.confirmPassword !== ''
               && form.value.firstName !== ''
               && form.value.lastName !== ''
               && form.value.dateOfBirth !== '';
     })
+
+    const asyncRegister = async () => {
+      inProgress.value = true;
+      try {
+        await store.dispatch('register', form.value);
+        await notifyAsync(NotificationType.Success, "Account Created Successfully");
+        router.push({
+          name: RouteName.LogInPage
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        inProgress.value = false;
+      }
+    }
+
     return {
+      asyncRegister,
       canCreateAccount,
       form,
       calendarNumber,
+      inProgress,
       key,
       mail,
       person,

@@ -40,8 +40,9 @@
 </template>
 
 <script>
-import PrescriptionViewModal from '@/store/view-models/prescription-view-modal'
 import Modal from '@/components/add-edit-prescription-model.vue'
+import { notifyAsync, NotificationType } from '@/toast-notifications'
+import PrescriptionViewModal from '@/store/view-models/prescription-view-modal'
 import {
   createOutline,
   trashOutline,
@@ -55,7 +56,6 @@ import {
   IonModal,
   IonIcon,
   IonText,
-  toastController,
 } from '@ionic/vue';
 
 export default {
@@ -75,13 +75,8 @@ export default {
     const setOpen = (state) => isOpenRef.value = state;
     const handleDelete = async () => {
       await store.dispatch('deletePrescription', props.prescription.prescriptionId);
-      const toast = await toastController.create({
-        message: `${props.prescription.name} ${props.prescription.quantity} deleted successfully`,
-        duration: 2000,
-        color: "success", 
-        animated: true
-      });
-      toast.present();
+      const message = `${props.prescription.name} ${props.prescription.quantity} deleted successfully`;
+      await notifyAsync(NotificationType.Success, message);
     }
     return {
       isOpenRef, 

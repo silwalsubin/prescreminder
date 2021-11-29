@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import { toastController } from '@ionic/vue';
+import { notifyAsync, NotificationType } from '@/toast-notifications'
 import { getBearerToken, removeBearerToken } from '../bearer-token-service'
 
 const httpClient = axios;
@@ -11,13 +11,7 @@ httpClient.interceptors.response.use((response) => {
   // Do something with response error
   const waitTime = 4000;
   if (error.response.status === 401) {
-    const toast = await toastController.create({
-      message: 'Session Expired!',
-      duration: waitTime, 
-      color: "warning",
-      animated: true
-    });
-    toast.present();
+    await notifyAsync(NotificationType.Warning, 'Session Expired!');
 
     setTimeout(() => {
       removeBearerToken();
@@ -26,13 +20,7 @@ httpClient.interceptors.response.use((response) => {
   }
 
   if (error.response.status === 400) {
-    const toast = await toastController.create({
-      message: error.response.data,
-      duration: 2000, 
-      color: "danger",
-      animated: true
-    });
-    toast.present();
+    await notifyAsync(NotificationType.Error, error.response.data);
   }
   return Promise.reject(error.response);
 });

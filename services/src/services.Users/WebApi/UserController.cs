@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using middleware.Authentication;
+using prescreminder.Utilities;
 using services.Users.Payload;
 using services.Users.Persistence;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -20,31 +19,6 @@ namespace services.Users.WebApi
         public UserController(UsersRepository usersRepository)
         {
             _usersRepository = usersRepository;
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IEnumerable<UsersTableSchema.UserRecord>> Get()
-        {
-            var result = (await _usersRepository.GetAll()).ToList();
-            if (!result.Any())
-            {
-                var testUser = new UsersTableSchema.UserRecord
-                {
-                    UserId = Guid.NewGuid(),
-                    UserName = "subinho",
-                    EmailAddress = "subinho09@gmail.com",
-                    Password = "1234",
-                    FirstName = "Subin",
-                    MiddleName = null,
-                    LastName = "Silwal",
-                    DateOfBirthUtc = DateTime.UtcNow
-                };
-                await _usersRepository.InsertAsync(testUser);
-                result.Add(testUser);
-            }
-
-            return result;
         }
 
         [HttpPost]
@@ -71,12 +45,49 @@ namespace services.Users.WebApi
             });
         }
 
-        [HttpGet]
-        [Route("authorize")]
-        public ActionResult Authorize()
+        [HttpPost]
+        [Route("register")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Register([FromBody] RegisterPayload payload)
         {
-            var currentUser = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
-            return Ok("");
+            if (!payload.UserName.IsAlphaNumeric())
+                return BadRequest("Username must be letters or numbers");
+
+            if (!payload.EmailAddress.IsEmailAddress())
+                return BadRequest("Invalid Email Address");
+
+            if (!string.Equals(payload.Password, payload.ConfirmPassword))
+                return BadRequest("Passwords do not match");
+
+            if (await _usersRepository.GetByEmailAddress(payload.EmailAddress) != null)
+                return BadRequest("Email Address has already been taken");
+
+            if (await _usersRepository.GetByUserName(payload.UserName) != null)
+                return BadRequest("UserName has already been taken");
+
+            var userRecord = new UsersTableSchema.UserRecord
+            {
+                UserName = payload.UserName,
+                EmailAddress = payload.EmailAddress,
+                Password = payload.Password,
+                FirstName = payload.FirstName,
+                MiddleName = payload.MiddleName,
+                LastName = payload.LastName,
+                DateOfBirthUtc = payload.DateOfBirth,
+                UserId = Guid.NewGuid(),
+            };
+
+            await _usersRepository.InsertAsync(userRecord);
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
+            // need to delete other records associated with the users as well.
+            await _usersRepository.DeleteByUserId(userId);
+            return Ok();
         }
     }
 }

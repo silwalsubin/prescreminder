@@ -115,7 +115,7 @@ import { ref, computed, onMounted } from 'vue'
 import TimePicker from './time-picker.vue';
 import DatePicker from './form-elements/date-picker.vue';
 import InputField from './form-elements/input-field.vue';
-import { toastController } from '@ionic/vue';
+import { notifyAsync, NotificationType } from '@/toast-notifications'
 import TimeOfDay from "@/store/domain/time-of-day";
 
 import {
@@ -181,13 +181,7 @@ export default {
         await store.dispatch('addPrescription', form.value);
       }
       formDisabled.value = false;
-      const toast = await toastController.create({
-        message: 'Saved successfully',
-        duration: 2000,
-        color: "success", 
-        animated: true
-      });
-      toast.present();
+      await notifyAsync(NotificationType.Success, "Saved successfully")
       emit('close');
     }
 

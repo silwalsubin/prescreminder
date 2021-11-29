@@ -35,6 +35,14 @@ export const store = createStore<State>({
         setBearerToken(bearerToken);
       })
     },
+    register(_, payload) {
+      return httpClient.post('/user/register', payload);
+    },
+    deleteAccount() {
+      return httpClient.delete('/user').then(() => {
+        removeBearerToken();
+      });
+    },
     loadMedicationsToday({commit}){
       return httpClient.get('/userMedicationToday').then(response => {
         const userMedications: MedicationCheckListItem[] = response.data;
