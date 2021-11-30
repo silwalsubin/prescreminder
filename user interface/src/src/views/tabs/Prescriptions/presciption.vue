@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import Modal from '@/components/add-edit-prescription-model.vue'
+import Modal from '@/components/add-edit-prescription-modal.vue'
 import { notifyAsync, NotificationType } from '@/toast-notifications'
 import PrescriptionViewModal from '@/store/view-models/prescription-view-modal'
 import {

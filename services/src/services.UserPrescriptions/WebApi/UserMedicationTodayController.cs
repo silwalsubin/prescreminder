@@ -29,7 +29,7 @@ namespace services.UserPrescriptions.WebApi
         public async Task<IEnumerable<MedicationInfoViewModel>> Get()
         {
             var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
-            var prescriptionRecords = await _userPrescriptionsRepository.GetByUserIdAsync(userId);
+            var prescriptionRecords = (await _userPrescriptionsRepository.GetByUserIdAsync(userId)).Where(x => x.StartDateUtc <= DateTime.UtcNow);
             var result = new List<MedicationInfoViewModel>();
             foreach (var prescriptionRecord in prescriptionRecords)
             {

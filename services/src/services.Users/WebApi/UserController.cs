@@ -71,7 +71,7 @@ namespace services.Users.WebApi
                 EmailAddress = payload.EmailAddress,
                 Password = payload.Password,
                 FirstName = payload.FirstName,
-                MiddleName = payload.MiddleName,
+                MiddleName = string.IsNullOrWhiteSpace(payload.MiddleName) ? null : payload.MiddleName,
                 LastName = payload.LastName,
                 DateOfBirthUtc = payload.DateOfBirth,
                 UserId = Guid.NewGuid(),

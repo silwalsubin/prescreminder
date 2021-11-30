@@ -7,6 +7,7 @@ import PrescriptionViewModal from './view-models/prescription-view-modal';
 import MedicationInfoViewModel from './view-models/medication-info-view-model';
 import UserHistoryViewModel from './view-models/user-history-view-model';
 import MedicationCheckListItem from './view-models/medication-check-list-item';
+import NotificationViewModel from './view-models/notification-view-model';
 import _ from 'lodash';
 
 
@@ -16,6 +17,7 @@ export interface State {
   medicationsToday: MedicationInfoViewModel[];
   userHistories: UserHistoryViewModel[];
   medicationCheckListItems: MedicationCheckListItem[];
+  notifications: NotificationViewModel[];
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
@@ -27,6 +29,7 @@ export const store = createStore<State>({
     medicationsToday: [],
     userHistories: [],
     medicationCheckListItems: [],
+    notifications: []
   },
   actions: {
     logIn(_, payload) {
@@ -63,6 +66,15 @@ export const store = createStore<State>({
         })
       })
     },
+    loadNotifications({commit}){
+      return httpClient.get('userEventNotifications').then(response => {
+        commit('updateNotifications', response.data);
+      })
+    },
+    clearNotification({commit}, notificationId){
+      commit('deleteNotification', notificationId);
+      return httpClient.post(`userEventNotifications/clear/${notificationId}`);
+    },
     loadPrescriptions({commit}) {
       return httpClient.get('/userPrescription').then(response => {
         commit('setPrescriptions', response.data);
@@ -72,18 +84,21 @@ export const store = createStore<State>({
       return httpClient.post('/userPrescription/add', payload).then(() => {
         dispatch('loadPrescriptions');
         dispatch('loadMedicationsToday');
+        dispatch('loadNotifications');
       });
     },
     deletePrescription({commit, dispatch}, prescriptionId) {
       return httpClient.delete(`/userPrescription/${prescriptionId}`).then(() => {
         commit('deletePrescription', prescriptionId);
         dispatch('loadMedicationsToday');
+        dispatch('loadNotifications');
       })
     },
     updatePrescription({commit, dispatch}, payload){
       return httpClient.post(`/userPrescription/${payload.prescriptionId}`, payload.viewModal).then(() => {
         commit('updatePrescription', payload.viewModal);
         dispatch('loadMedicationsToday');
+        dispatch('loadNotifications');
       })
     },
     updateMedicationTaken({commit}, payload: MedicationCheckListItem){
@@ -132,12 +147,22 @@ export const store = createStore<State>({
         y.minute === payload.minute
       );
       state.medicationCheckListItems[index].historyId = payload.historyId;
+    },
+    updateNotifications(state, payload){
+      state.notifications = payload;
+    },
+    deleteNotification(state, notificationId){
+      const index = state.notifications.findIndex(x => x.notificationId === notificationId);
+      if (index !== -1){
+        state.notifications.splice(index, 1);
+      }
     }
   },
   getters: {
     addPrescriptionPayload: state => _.cloneDeep(state.addPrescriptionPayload),
     prescriptions: state => _.cloneDeep(state.prescriptions),
     medicationCheckListItems: state => _.cloneDeep(state.medicationCheckListItems),
+    notifications: state => _.cloneDeep(state.notifications),
   }
 })
 

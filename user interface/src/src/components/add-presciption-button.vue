@@ -19,7 +19,7 @@
 import { add } from 'ionicons/icons';
 import { IonModal, IonFab, IonFabButton, IonIcon, } from '@ionic/vue';
 import { ref } from 'vue';
-import Modal from './add-edit-prescription-model.vue'
+import Modal from './add-edit-prescription-modal.vue'
 
 export default {
   components: { IonModal, Modal, IonFab, IonFabButton, IonIcon, },

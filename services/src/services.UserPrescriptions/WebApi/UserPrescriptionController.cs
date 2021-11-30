@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using contracts.Notifications;
+using Microsoft.AspNetCore.Mvc;
 using middleware.Authentication;
 using services.UserPrescriptions.Domain;
 using services.UserPrescriptions.Persistence;
@@ -15,11 +16,17 @@ namespace services.UserPrescriptions.WebApi
     {
         private readonly UserPrescriptionsRepository _userPrescriptionsRepository;
         private readonly PrescriptionTimesRepository _prescriptionTimesRepository;
+        private readonly INotificationService _notificationService;
 
-        public UserPrescriptionController(UserPrescriptionsRepository userPrescriptionsRepository, PrescriptionTimesRepository prescriptionTimesRepository)
+        public UserPrescriptionController(
+            UserPrescriptionsRepository userPrescriptionsRepository,
+            PrescriptionTimesRepository prescriptionTimesRepository,
+            INotificationService notificationService
+        )
         {
             _userPrescriptionsRepository = userPrescriptionsRepository;
             _prescriptionTimesRepository = prescriptionTimesRepository;
+            _notificationService = notificationService;
         }
 
         [HttpGet]
@@ -57,6 +64,7 @@ namespace services.UserPrescriptions.WebApi
         public async Task<IActionResult> Update(Guid id, [FromBody] PrescriptionViewModel model)
         {
             var prescriptionId = id;
+            var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
             var userPrescriptionRecord = new UserPrescriptionsTableSchema.UserPrescriptionRecord
             {
                 UserId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId),
@@ -87,6 +95,21 @@ namespace services.UserPrescriptions.WebApi
                 await _prescriptionTimesRepository.InsertAsync(prescriptionRecord);
             }
 
+            if (model.ExpirationDate.HasValue)
+            {
+                await _notificationService.AddOrUpdateEventNotification(new EventNotification
+                {
+                    Event = $"Prescription Expiration for {model.Name}",
+                    EventDateUtc = model.ExpirationDate.Value,
+                    UserId = userId,
+                    NotificationId = prescriptionId
+                });
+            }
+            else
+            {
+                await _notificationService.DeleteById(prescriptionId);
+            }
+
             return Ok();
         }
 
@@ -98,6 +121,7 @@ namespace services.UserPrescriptions.WebApi
             var prescriptionRecord = (await _userPrescriptionsRepository.GetByUserIdAsync(userId)).Single(x => x.PrescriptionId == id);
             await _prescriptionTimesRepository.DeleteByPrescriptionIdAsync(prescriptionRecord.PrescriptionId);
             await _userPrescriptionsRepository.DeleteAsync(prescriptionRecord.PrescriptionId);
+            await _notificationService.DeleteById(id);
             return Ok();
         }
 
@@ -106,9 +130,10 @@ namespace services.UserPrescriptions.WebApi
         public async Task<IActionResult> Add([FromBody] AddPrescriptionPayload payload)
         {
             var prescriptionId = Guid.NewGuid();
+            var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
             var userPrescriptionRecord = new UserPrescriptionsTableSchema.UserPrescriptionRecord
             {
-                UserId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId),
+                UserId = userId,
                 PrescriptionId = prescriptionId,
                 CreatedDateUtc = DateTime.UtcNow,
                 ModifiedDateUtc = DateTime.UtcNow,
@@ -133,6 +158,17 @@ namespace services.UserPrescriptions.WebApi
             foreach (var prescriptionRecord in uniquePrescriptionTimeRecords)
             {
                 await _prescriptionTimesRepository.InsertAsync(prescriptionRecord);
+            }
+
+            if (payload.ExpirationDate.HasValue)
+            {
+                await _notificationService.AddOrUpdateEventNotification(new EventNotification
+                {
+                    Event = $"Prescription Expiration for {payload.Name}",
+                    EventDateUtc = payload.ExpirationDate.Value,
+                    UserId = userId,
+                    NotificationId = prescriptionId
+                });
             }
 
             return Ok();

@@ -4,6 +4,7 @@ using infrastructure.Database;
 using infrastructure.Database.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using middleware.Authentication;
+using services.Notifications;
 using services.UserMedicationIntakeHistories;
 using services.UserPrescriptions;
 using services.Users;
@@ -22,6 +23,7 @@ namespace prescreminder.API.Configurations
                 configuration.RootPath = $@"{AppDomain.CurrentDomain.BaseDirectory}\dist";
             });
 
+            NotificationServiceConfiguration.Configure(services);
             UserServiceConfiguration.Configure(services);
             UserPrescriptionServiceConfiguration.Configure(services);
             AuthenticationMiddleWareConfiguration.Configure(services);
