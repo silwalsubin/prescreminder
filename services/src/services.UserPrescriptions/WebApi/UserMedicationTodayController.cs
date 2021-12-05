@@ -39,7 +39,7 @@ namespace services.UserPrescriptions.WebApi
                     result.Add(new MedicationInfoViewModel
                     {
                         Name = prescriptionRecord.Name,
-                        Quantity = prescriptionRecord.Quantity,
+                        Quantity = prescriptionRecord.UnitDose,
                         Hour = prescriptionTime.Hour,
                         Minute = prescriptionTime.Minute,
                     });

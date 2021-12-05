@@ -4,7 +4,7 @@ import moment from 'moment';
 class AddPrescriptionPayload {
   constructor(){
     this.name = '';
-    this.quantity = '';
+    this.unitDose = '';
     this.startDate = moment().toISOString()
     this.timesOfDay = [
       new TimeOfDay(0, 0)
@@ -12,10 +12,10 @@ class AddPrescriptionPayload {
   }
 
   name: string;
-  quantity: string;
+  unitDose: string;
   startDate: string;
   completeDate?: string;
-  expirationDate?: string;
+  totalQuantity?: number;
   timesOfDay: TimeOfDay[]
 }
 

@@ -13,7 +13,8 @@ namespace services.UserPrescriptions.Persistence
 	            [PrescriptionId] [UniqueIdentifier] NOT NULL PRIMARY KEY,
 	            [UserId] [UniqueIdentifier] NOT NULL,
 	            [Name] [nvarchar](max) NOT NULL,
-	            [Quantity] [nvarchar](max) NOT NULL,
+	            [UnitDose] [nvarchar](max) NOT NULL,
+                [TotalQuantity] [int] NOT NULL,
 				[StartDateUtc] [datetime] NOT NULL,
 				[CompleteDateUtc] [datetime] NULL,
 				[ExpirationDateUtc] [datetime] NULL,
@@ -30,7 +31,8 @@ namespace services.UserPrescriptions.Persistence
             public Guid PrescriptionId { get; set; }
             public Guid UserId { get; set; }
             public string Name { get; set; }
-            public string Quantity { get; set; }
+            public string UnitDose { get; set; }
+            public int TotalQuantity { get; set; }
             public DateTime StartDateUtc { get; set; }
             public DateTime? CompleteDateUtc { get; set; }
             public DateTime? ExpirationDateUtc { get; set; }

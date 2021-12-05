@@ -1,10 +1,10 @@
 interface PrescriptionViewModal {
   prescriptionId: string;
   name: string;
-  quantity: string;
+  unitDose: string;
   startDate: string;
   completeDate?: string;
-  expirationDate?: string;
+  totalQuantity: number;
   timesOfDay: TimeOfDay[];
 }
 

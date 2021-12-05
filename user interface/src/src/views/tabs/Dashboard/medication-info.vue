@@ -1,5 +1,5 @@
 <template>
-  <ion-item lines="full" class="medication-info-ion-item">
+  <form-item>
     <div class="medication-info-item">
       <ion-label
         :color="isTaken ? 'medium': 'dark'" 
@@ -18,16 +18,16 @@
       :checked="isTaken"
       color="success">
     </ion-toggle>
-  </ion-item>
+  </form-item>
 </template>
 
 <script>
 import { computed } from 'vue';
 import moment from 'moment';
 import { useStore } from '@/store/store'
+import FormItem from "@/components/form-elements/form-item.vue";
 import MedicationInfoViewModel from '@/store/view-models/medication-info-view-model';
 import {
-  IonItem,
   IonLabel,
   IonText,
   IonToggle,
@@ -38,7 +38,7 @@ export default {
     medicationInfo: { type: MedicationInfoViewModel, required: true }
   },
   components: {
-    IonItem,
+    FormItem,
     IonLabel,
     IonText,
     IonToggle,

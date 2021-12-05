@@ -21,30 +21,29 @@
         :disabled="formDisabled"
       />
       <input-field
-        v-model:inputValue="form.quantity"
-        label="Quantity of each intake"
+        v-model:inputValue="form.unitDose"
+        label="Unit Dose"
         placeholder="Required"
+        :disabled="formDisabled"
+      />
+      <input-field
+        v-model:inputValue="form.totalQuantity"
+        label="Total Quantity"
+        placeholder="Required"
+        type="number"
         :disabled="formDisabled"
       />
       <date-picker
         v-model:inputValue="form.startDate"
-        label="Date to begin the medication"
+        label="Start Date"
         placeholder="Required"
-        :disabled="formDisabled"
-        :max="String(new Date().getFullYear() + 10)"
-        :min="String(new Date().toISOString().split('T')[0])"
-      />
-      <date-picker
-        v-model:inputValue="form.expirationDate"
-        label="Date till the mediation will last"
-        placeholder="Optional"
         :disabled="formDisabled"
         :max="String(new Date().getFullYear() + 10)"
         :min="String(new Date().toISOString().split('T')[0])"
       />
       <date-picker
         v-model:inputValue="form.completeDate"
-        label="Date the medication is no longer required"
+        label="End Date"
         placeholder="Optional"
         :disabled="formDisabled"
         :max="String(new Date().getFullYear() + 10)"
@@ -165,9 +164,10 @@ export default {
     const isFormValid = computed(() => {
       const formValue = form.value;
       return formValue.name.trim() !== ''
-              && formValue.quantity.trim() !== ''
+              && formValue.unitDose.trim() !== ''
               && formValue.startDate
               && formValue.timesOfDay.length > 0
+              && Number(formValue.totalQuantity) >= 1
     })
 
     const handleConfirm = async () => {

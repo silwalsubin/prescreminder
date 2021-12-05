@@ -1,14 +1,14 @@
 <template>
-  <div class="prescription-card">
+  <form-item>
     <div class="prescription-information">
-      <ion-text color="dark">
-        <h4>{{prescription.name}}</h4>
-      </ion-text>
+      <ion-label color="dark" position="stacked">
+        {{prescription.name}}
+      </ion-label>
       <ion-text color="medium">
-        <p>{{prescription.quantity}}</p>
+        <p>{{prescription.unitDose}}</p>
       </ion-text>
     </div>
-    <div class="prescription-actions">
+      <div class="prescription-actions" slot="end">
       <div class="precription-actions-buttons">
         <ion-button
           fill="clear"
@@ -36,10 +36,11 @@
         </ion-modal>
       </div>
     </div>
-  </div>
+  </form-item>
 </template>
 
 <script>
+import FormItem from "@/components/form-elements/form-item.vue";
 import Modal from '@/components/add-edit-prescription-modal.vue'
 import { notifyAsync, NotificationType } from '@/toast-notifications'
 import PrescriptionViewModal from '@/store/view-models/prescription-view-modal'
@@ -55,14 +56,17 @@ import {
   IonButton,
   IonModal,
   IonIcon,
+  IonLabel,
   IonText,
 } from '@ionic/vue';
 
 export default {
   components: {
+    FormItem,
     Modal,
     IonButton,
     IonIcon,
+    IonLabel,
     IonModal,
     IonText,
   },
@@ -75,7 +79,7 @@ export default {
     const setOpen = (state) => isOpenRef.value = state;
     const handleDelete = async () => {
       await store.dispatch('deletePrescription', props.prescription.prescriptionId);
-      const message = `${props.prescription.name} ${props.prescription.quantity} deleted successfully`;
+      const message = `${props.prescription.name} ${props.prescription.unitDose} deleted successfully`;
       await notifyAsync(NotificationType.Success, message);
     }
     return {
@@ -88,26 +92,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.prescription-card {
-  display: flex;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  border: 1px solid grey;
-}
-
-.prescription-information {
-  padding-left: 10px;
-  flex: 4;
-}
-
-.prescription-actions {
-  flex: 1;
-}
-
-.precription-actions-buttons {
-  max-width: 50px;
-  float: right;
-}
-</style>

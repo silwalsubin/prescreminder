@@ -47,10 +47,10 @@ namespace services.UserPrescriptions.WebApi
                 {
                     PrescriptionId = x.PrescriptionId,
                     Name = x.Name,
-                    Quantity = x.Quantity,
+                    UnitDose = x.UnitDose,
                     CompleteDate = x.CompleteDateUtc,
                     StartDate = x.StartDateUtc,
-                    ExpirationDate = x.ExpirationDateUtc,
+                    TotalQuantity = x.TotalQuantity,
                     TimesOfDay = prescriptionTimes
                 };
 
@@ -73,9 +73,9 @@ namespace services.UserPrescriptions.WebApi
                 ModifiedDateUtc = DateTime.UtcNow,
                 StartDateUtc = model.StartDate,
                 CompleteDateUtc = model.CompleteDate,
-                ExpirationDateUtc = model.ExpirationDate,
+                TotalQuantity = model.TotalQuantity,
                 Name = model.Name,
-                Quantity = model.Quantity,
+                UnitDose = model.UnitDose,
             };
 
             var uniquePrescriptionTimeRecords = model.TimesOfDay.Select(x => new { x.Hour, x.Minute }).Distinct().Select(x =>
@@ -95,20 +95,13 @@ namespace services.UserPrescriptions.WebApi
                 await _prescriptionTimesRepository.InsertAsync(prescriptionRecord);
             }
 
-            if (model.ExpirationDate.HasValue)
+            await _notificationService.AddOrUpdateEventNotification(new EventNotification
             {
-                await _notificationService.AddOrUpdateEventNotification(new EventNotification
-                {
-                    Event = $"Prescription Expiration for {model.Name}",
-                    EventDateUtc = model.ExpirationDate.Value,
-                    UserId = userId,
-                    NotificationId = prescriptionId
-                });
-            }
-            else
-            {
-                await _notificationService.DeleteById(prescriptionId);
-            }
+                Event = $"Prescription Expiration for {model.Name}",
+                EventDateUtc = PrescriptionExpirationCalculator.GetExpirationTimeUtc(model.TotalQuantity, model.StartDate, model.TimesOfDay.Count),
+                UserId = userId,
+                NotificationId = prescriptionId
+            });
 
             return Ok();
         }
@@ -139,9 +132,10 @@ namespace services.UserPrescriptions.WebApi
                 ModifiedDateUtc = DateTime.UtcNow,
                 StartDateUtc = payload.StartDate,
                 CompleteDateUtc = payload.CompleteDate,
-                ExpirationDateUtc = payload.ExpirationDate,
+                ExpirationDateUtc = PrescriptionExpirationCalculator.GetExpirationTimeUtc(payload.TotalQuantity, payload.StartDate, payload.TimesOfDay.Count),
                 Name = payload.Name,
-                Quantity = payload.Quantity,
+                TotalQuantity = payload.TotalQuantity,
+                UnitDose = payload.UnitDose,
             };
 
             var uniquePrescriptionTimeRecords = payload.TimesOfDay.Select(x => new { x.Hour, x.Minute }).Distinct().Select(x =>
@@ -160,16 +154,13 @@ namespace services.UserPrescriptions.WebApi
                 await _prescriptionTimesRepository.InsertAsync(prescriptionRecord);
             }
 
-            if (payload.ExpirationDate.HasValue)
+            await _notificationService.AddOrUpdateEventNotification(new EventNotification
             {
-                await _notificationService.AddOrUpdateEventNotification(new EventNotification
-                {
-                    Event = $"Prescription Expiration for {payload.Name}",
-                    EventDateUtc = payload.ExpirationDate.Value,
-                    UserId = userId,
-                    NotificationId = prescriptionId
-                });
-            }
+                Event = $"Prescription Expiration for {payload.Name}",
+                EventDateUtc = PrescriptionExpirationCalculator.GetExpirationTimeUtc(payload.TotalQuantity, payload.StartDate, payload.TimesOfDay.Count),
+                UserId = userId,
+                NotificationId = prescriptionId
+            });
 
             return Ok();
         }

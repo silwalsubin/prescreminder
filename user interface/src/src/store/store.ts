@@ -81,6 +81,7 @@ export const store = createStore<State>({
       })
     },
     addPrescription({dispatch}, payload) {
+      payload.totalQuantity = Number(payload.totalQuantity);
       return httpClient.post('/userPrescription/add', payload).then(() => {
         dispatch('loadPrescriptions');
         dispatch('loadMedicationsToday');
@@ -95,6 +96,7 @@ export const store = createStore<State>({
       })
     },
     updatePrescription({commit, dispatch}, payload){
+      payload.totalQuantity = Number(payload.totalQuantity);
       return httpClient.post(`/userPrescription/${payload.prescriptionId}`, payload.viewModal).then(() => {
         commit('updatePrescription', payload.viewModal);
         dispatch('loadMedicationsToday');

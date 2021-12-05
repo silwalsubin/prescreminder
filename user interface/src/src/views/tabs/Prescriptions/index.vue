@@ -58,10 +58,6 @@ export default  {
 </script>
 
 <style scoped>
-.prescriptions-tab-container {
-  padding: 20px;
-}
-
 .no-prescriptions {
   display: flex;
   align-items: center;
