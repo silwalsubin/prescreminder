@@ -17,7 +17,15 @@ namespace prescreminder.API.Configurations
                     corsPolicyBuilder
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        .AllowAnyOrigin();
+                        .AllowAnyOrigin()
+                        .WithExposedCustomHeaders();
+                });
+            }
+            else
+            {
+                app.UseCors(corsPolicyBuilder =>
+                {
+                    corsPolicyBuilder.WithExposedCustomHeaders();
                 });
             }
 

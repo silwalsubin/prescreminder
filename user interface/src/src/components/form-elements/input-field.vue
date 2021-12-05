@@ -12,7 +12,7 @@
   </ion-item>
 </template>
 
-<script lang="ts">
+<script>
 import {
   IonInput, 
   IonItem,

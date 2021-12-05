@@ -14,6 +14,7 @@ namespace services.UserPrescriptions
             services.AddTransient<ITableSchema, PrescriptionTimesTableSchema>();
             services.AddScoped<PrescriptionTimesTableSchema>();
             services.AddScoped<PrescriptionTimesRepository>();
+            services.AddScoped<PrescriptionsPdfGenerator>();
         }
     }
 }

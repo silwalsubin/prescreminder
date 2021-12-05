@@ -1,6 +1,6 @@
 import { InjectionKey } from 'vue';
 import { createStore, useStore as baseUseStore, Store } from 'vuex';
-import httpClient from '@/store/http-client';
+import httpClient, { fileDownload } from '@/store/http-client';
 import { removeBearerToken, setBearerToken } from '@/bearer-token-service';
 import AddPrescriptionPayload from './payloads/add-prescription-payload';
 import PrescriptionViewModal from './view-models/prescription-view-modal';
@@ -70,6 +70,11 @@ export const store = createStore<State>({
       return httpClient.get('userEventNotifications').then(response => {
         commit('updateNotifications', response.data);
       })
+    },
+    getPrescriptionsPdf(){
+      return httpClient.get('userPrescription/pdf', {
+        responseType: 'blob',        
+      }).then(fileDownload)
     },
     clearNotification({commit}, notificationId){
       commit('deleteNotification', notificationId);

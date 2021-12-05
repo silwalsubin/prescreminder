@@ -1,10 +1,13 @@
 ﻿using contracts.Notifications;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using middleware.Authentication;
+using prescreminder.Utilities;
 using services.UserPrescriptions.Domain;
 using services.UserPrescriptions.Persistence;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,20 +20,33 @@ namespace services.UserPrescriptions.WebApi
         private readonly UserPrescriptionsRepository _userPrescriptionsRepository;
         private readonly PrescriptionTimesRepository _prescriptionTimesRepository;
         private readonly INotificationService _notificationService;
+        private readonly PrescriptionsPdfGenerator _prescriptionsPdfGenerator;
 
         public UserPrescriptionController(
             UserPrescriptionsRepository userPrescriptionsRepository,
             PrescriptionTimesRepository prescriptionTimesRepository,
-            INotificationService notificationService
+            INotificationService notificationService,
+            PrescriptionsPdfGenerator prescriptionsPdfGenerator
         )
         {
             _userPrescriptionsRepository = userPrescriptionsRepository;
             _prescriptionTimesRepository = prescriptionTimesRepository;
             _notificationService = notificationService;
+            _prescriptionsPdfGenerator = prescriptionsPdfGenerator;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<PrescriptionViewModel>> Get()
+        [Route("pdf")]
+        public async Task<IActionResult> Pdf()
+        {
+            var memoryStream = new MemoryStream(_prescriptionsPdfGenerator.GetFileStream());
+            const string fileName = "Prescriptions.pdf";
+            Response.SetFileName(fileName);
+            return File(memoryStream, "application/octet-stream", fileName);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
             var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
             var prescriptionRecords = await _userPrescriptionsRepository.GetByUserIdAsync(userId);
@@ -56,7 +72,7 @@ namespace services.UserPrescriptions.WebApi
 
                 result.Add(viewModal);
             }
-            return result;
+            return Ok(result);
         }
 
         [HttpPost]

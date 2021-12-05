@@ -8,7 +8,7 @@
         <p>{{prescription.unitDose}}</p>
       </ion-text>
     </div>
-      <div class="prescription-actions" slot="end">
+    <div class="prescription-actions" slot="end">
       <div class="precription-actions-buttons">
         <ion-button
           fill="clear"

@@ -10,10 +10,6 @@
         <ion-tab-button tab="tab2" href="/tabs/prescriptions">
           <ion-icon :icon="listCircleOutline" />
         </ion-tab-button>
-
-        <ion-tab-button tab="tab3" href="/tabs/history">
-          <ion-icon :icon="statsChart" />
-        </ion-tab-button>
         
         <ion-tab-button tab="tab4" href="/tabs/account">
           <ion-icon :icon="personCircle" />
@@ -29,9 +25,6 @@ import {
   homeOutline,
   listCircleOutline,
   personCircle,
-  square, 
-  statsChart,
-  triangle 
 } from 'ionicons/icons';
 
 import { useStore } from '@/store/store';
@@ -49,9 +42,6 @@ export default {
       homeOutline,
       listCircleOutline,
       personCircle,
-      square,
-      statsChart,
-      triangle,
     }
   }
 }

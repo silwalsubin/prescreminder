@@ -50,11 +50,6 @@ const routes: Array<RouteRecordRaw> = [
         name: RouteName.PrescriptionTab
       },
       {
-        path: 'history',
-        component: () => import('@/views/tabs/History.vue'),
-        name: RouteName.HistoryTab
-      },
-      {
         path: 'account',
         component: () => import('@/views/tabs/Account.vue'),
         name: RouteName.AccountTab
