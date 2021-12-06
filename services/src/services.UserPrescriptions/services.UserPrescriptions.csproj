@@ -6,7 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
-    <PackageReference Include="iTextSharp" Version="5.5.13.2" />
+    <PackageReference Include="itext7" Version="7.2.0" />
+    <PackageReference Include="itext7.pdfhtml" Version="4.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
   </ItemGroup>
@@ -15,6 +16,13 @@
     <ProjectReference Include="..\contracts.Notifications\contracts.Notifications.csproj" />
     <ProjectReference Include="..\contracts.Persistence\contracts.Persistence.csproj" />
     <ProjectReference Include="..\middleware.Authentication\middleware.Authentication.csproj" />
+    <ProjectReference Include="..\services.Users\services.Users.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Styles\pdf-styles.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

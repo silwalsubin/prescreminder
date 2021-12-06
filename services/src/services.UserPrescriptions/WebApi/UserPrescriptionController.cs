@@ -39,7 +39,8 @@ namespace services.UserPrescriptions.WebApi
         [Route("pdf")]
         public async Task<IActionResult> Pdf()
         {
-            var memoryStream = new MemoryStream(_prescriptionsPdfGenerator.GetFileStream());
+            var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
+            var memoryStream = new MemoryStream(await _prescriptionsPdfGenerator.GetFileStream(userId));
             const string fileName = "Prescriptions.pdf";
             Response.SetFileName(fileName);
             return File(memoryStream, "application/octet-stream", fileName);

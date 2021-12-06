@@ -25,6 +25,17 @@ namespace services.Users.Persistence
             return result.SingleOrDefault();
         }
 
+        public async Task<string> GetUserFullName(Guid userId)
+        {
+            var sql = $@"
+                SELECT * FROM [{_usersTableSchema.Schema}].[{_usersTableSchema.TableName}]
+                WHERE UserId  = @userId";
+            var result = (await DbConnection.QueryAsync<UsersTableSchema.UserRecord>(sql, new { userId })).Single();
+            return result.MiddleName != null
+                ? $"{result.FirstName} {result.MiddleName} {result.LastName}"
+                : $"{result.FirstName} {result.LastName}";
+        }
+
         public async Task<UsersTableSchema.UserRecord> GetByEmailAddress(string emailAddress)
         {
             var sql = $@"
