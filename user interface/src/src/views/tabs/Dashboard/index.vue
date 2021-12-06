@@ -1,11 +1,14 @@
 <template>
   <ion-page>
-    <tab-header header-title="Today's Medication List"/>
+    <tab-header header-title="Reminders Today"/>
     <ion-content :fullscreen="true"> 
-      <add-prescription-button v-if="medicationsToday.length === 0" />
+      <add-prescription-button v-if="prescriptions.length === 0" />
       <div class="no-prescriptions" v-if="medicationsToday.length === 0">
-        <ion-text color="medium">
+        <ion-text color="medium" v-if="prescriptions.length === 0">
         No medication list available since you do not have any prescriptions. Click the + button to create one.
+        </ion-text>
+        <ion-text color="medium" v-else>
+        You do not have any medicine to intake now.
         </ion-text>
       </div>
       <medication-info 
@@ -42,9 +45,10 @@ export default  {
   },
   setup() {
     const store = useStore();
-
     const medicationsToday = computed(() => store.getters.medicationCheckListItems);
+    const prescriptions = computed(() => store.getters.prescriptions);
     return {
+      prescriptions,
       medicationsToday,
     }
   }

@@ -7,15 +7,15 @@
       >
         {{medicationInfo.name}} {{medicationInfo.quantity}}
       </ion-label>
-      <ion-text :color="isTaken ? 'medium': medicationInfoColor">
-        <p>
-        {{humanizedTime}}
-        </p>
+      <ion-text 
+        :color="isTaken ? 'medium': medicationInfoColor"
+      >
+        <p>{{humanizedTime}}</p>
       </ion-text>
     </div>
     <ion-toggle slot="end"
       @ionChange="handleTakenChange"
-      :checked="isTaken"
+      :checked="!isTaken"
       color="success">
     </ion-toggle>
   </form-item>
@@ -55,8 +55,8 @@ export default {
     })
     const medicationInfoColor = computed(() => {
       const minutes = medicationInfoDateTimeMoment.value.diff(moment(), 'minutes');
-      if (minutes <= -60) return "danger";
-      if (minutes <= 0) return "warning";
+      if (minutes <= 0) return "danger";
+      if (minutes <= 10) return "warning";
       else return "primary";
     })
     const handleTakenChange = () => {
