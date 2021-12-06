@@ -3,7 +3,8 @@
     <tab-header header-title="My Prescriptions"/>
     <ion-content :fullscreen="true">
       <add-prescription-button />
-      <share-prescription-button />
+      <share-prescription-button v-if="prescriptions.length > 0"/>
+      <download-prescription-button v-if="prescriptions.length > 0"/>
       <div class="no-prescriptions" v-if="prescriptions.length === 0">
         <ion-text color="medium">
         You do not have any prescriptions. Click the + button to create one.
@@ -29,6 +30,7 @@ import {
 
 import AddPrescriptionButton from '@/components/add-presciption-button.vue'
 import SharePrescriptionButton from "./share-prescriptions-button.vue"
+import DownloadPrescriptionButton from "./download-prescriptions-button.vue"
 import TabHeader from '@/components/tabs/tab-header.vue'
 import { useStore } from '@/store/store'
 import { onMounted, computed } from 'vue'
@@ -37,6 +39,7 @@ export default  {
   name: 'PrescriptionsTab',
   components: {
     AddPrescriptionButton,
+    DownloadPrescriptionButton,
     SharePrescriptionButton,
     IonContent,
     IonPage,
