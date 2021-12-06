@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { notifyAsync, NotificationType } from '@/toast-notifications'
 import { getBearerToken, removeBearerToken } from '../bearer-token-service'
 
@@ -37,4 +37,14 @@ httpClient.interceptors.request.use(injectBearerToken, error => {
   Promise.reject(error)
 })
 export default httpClient;
+
+export const fileDownload = (response: AxiosResponse): void => {
+  const fileName = response.headers['content-disposition'].split('filename=')[1].split(';')[0];
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', fileName);
+  document.body.appendChild(link);
+  link.click();
+}
 
