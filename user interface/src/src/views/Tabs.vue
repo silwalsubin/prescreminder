@@ -7,11 +7,11 @@
           <ion-icon :icon="homeOutline" />
         </ion-tab-button>
           
-        <ion-tab-button tab="tab2" href="/tabs/prescriptions">
+        <ion-tab-button tab="tab2" href="/tabs/prescriptions" @click="hapticsImpact">
           <ion-icon :icon="listCircleOutline" />
         </ion-tab-button>
         
-        <ion-tab-button tab="tab4" href="/tabs/account">
+        <ion-tab-button tab="tab4" href="/tabs/account" @click="hapticsImpact">
           <ion-icon :icon="personCircle" />
         </ion-tab-button>
       </ion-tab-bar>
@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
+import { Haptics, ImpactStyle } from "@capacitor/haptics"
 import {
   homeOutline,
   listCircleOutline,
@@ -34,10 +35,15 @@ export default {
   components: { IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage, IonRouterOutlet, },
   setup() {
     const store = useStore();
+    const hapticsImpact = async () => {
+      await Haptics.impact({ style: ImpactStyle.Medium });
+    }
     const initiateDashboard = async () => {
       await store.dispatch('loadMedicationsToday');
+      await hapticsImpact();
     }
     return {
+      hapticsImpact,
       initiateDashboard,
       homeOutline,
       listCircleOutline,
