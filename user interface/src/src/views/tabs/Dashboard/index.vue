@@ -8,16 +8,11 @@
         No medication list available since you do not have any prescriptions. Click the + button to create one.
         </ion-text>
       </div>
-      <div class="dashboard-tab-container">
-        <ion-list>
-          <ion-item-sliding v-for="medicationToday in medicationsToday" :key="medicationToday">
-              <medication-info :medicationInfo="medicationToday" />
-              <ion-item-options side="end">
-                <ion-item-option>Done</ion-item-option>
-              </ion-item-options>
-          </ion-item-sliding>
-        </ion-list>
-      </div>
+      <medication-info 
+        v-for="(medicationToday, index) in medicationsToday" 
+        :key="index"
+        :medicationInfo="medicationToday"
+      />
     </ion-content>
   </ion-page>
 </template>
@@ -29,10 +24,6 @@ import { useStore } from '@/store/store'
 import { onMounted, computed } from 'vue'
 import MedicationInfo from './medication-info.vue'
 import {
-  IonList,
-  IonItemSliding,
-  IonItemOption,
-  IonItemOptions,
   IonPage,
   IonContent,
   IonText,
@@ -45,10 +36,6 @@ export default  {
     AddPrescriptionButton,
     IonContent, 
     TabHeader, 
-    IonItemSliding,
-    IonItemOption,
-    IonItemOptions,
-    IonList,
     IonPage, 
     IonText,
     MedicationInfo,
