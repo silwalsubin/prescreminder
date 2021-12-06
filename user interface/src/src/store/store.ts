@@ -85,9 +85,11 @@ export const store = createStore<State>({
       commit('deleteNotification', notificationId);
       return httpClient.post(`userEventNotifications/clear/${notificationId}`);
     },
-    loadPrescriptions({commit}) {
+    loadPrescriptions({commit, dispatch}) {
       return httpClient.get('/userPrescription').then(response => {
         commit('setPrescriptions', response.data);
+        dispatch('loadMedicationsToday');
+        dispatch('loadNotifications');
       })
     },
     addPrescription({dispatch}, payload) {

@@ -33,7 +33,7 @@ import SharePrescriptionButton from "./share-prescriptions-button.vue"
 // import DownloadPrescriptionButton from "./download-prescriptions-button.vue"
 import TabHeader from '@/components/tabs/tab-header.vue'
 import { useStore } from '@/store/store'
-import { onMounted, computed } from 'vue'
+import { computed } from 'vue'
 import Prescription from './presciption.vue'
 export default  {
   name: 'PrescriptionsTab',
@@ -51,10 +51,6 @@ export default  {
     const store = useStore();
 
     const prescriptions = computed(() => store.getters.prescriptions);
-
-    onMounted(async () => {
-      await store.dispatch('loadPrescriptions');
-    })
 
     return {
       prescriptions,

@@ -21,7 +21,7 @@
 import AddPrescriptionButton from '@/components/add-presciption-button.vue'
 import TabHeader from '@/components/tabs/tab-header.vue'
 import { useStore } from '@/store/store'
-import { onMounted, computed } from 'vue'
+import { computed } from 'vue'
 import MedicationInfo from './medication-info.vue'
 import {
   IonPage,
@@ -44,11 +44,6 @@ export default  {
     const store = useStore();
 
     const medicationsToday = computed(() => store.getters.medicationCheckListItems);
-
-    onMounted(async () => {
-      await store.dispatch('loadMedicationsToday');
-    })
-
     return {
       medicationsToday,
     }

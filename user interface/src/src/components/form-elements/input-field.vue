@@ -37,7 +37,7 @@ export default {
   setup(props, {emit}) {
     const vModel = computed({ 
       get: () => props.inputValue, 
-      set: (value) => emit('update:inputValue', typeof(props.inputValue) === "number" ? Number(value) : value) 
+      set: (value) => emit('update:inputValue', props.type === "number" ? Number(value) : value) 
     });
 
     return {

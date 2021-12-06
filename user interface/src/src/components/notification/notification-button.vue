@@ -36,7 +36,7 @@ import {
 } from 'ionicons/icons';
 
 import { useStore } from '@/store/store';
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import Modal from './notification-modal.vue'
 
 export default  {
@@ -53,9 +53,6 @@ export default  {
     const store = useStore();
     const isOpenRef = ref(false);
     const setOpen = (state: boolean) => isOpenRef.value = state;
-    onMounted(async () => {
-      await store.dispatch('loadNotifications');
-    })
 
     const numberOfNotifications = computed(() => store.getters.notifications.length);
     return {
