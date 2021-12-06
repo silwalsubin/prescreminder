@@ -71,10 +71,15 @@ export const store = createStore<State>({
         commit('updateNotifications', response.data);
       })
     },
-    getPrescriptionsPdf(){
+    downloadPrescriptionPdf(){
       return httpClient.get('userPrescription/pdf', {
         responseType: 'blob',        
       }).then(fileDownload)
+    },
+    getPrescriptionPdf(){
+      return httpClient.get('userPrescription/pdf', {
+        responseType: 'blob',        
+      })
     },
     clearNotification({commit}, notificationId){
       commit('deleteNotification', notificationId);

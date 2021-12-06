@@ -16,7 +16,7 @@ export default {
   setup() {
     const store = useStore();
     const handleClickAsync = async () => {
-      await store.dispatch('getPrescriptionsPdf')
+      await store.dispatch('downloadPrescriptionPdf')
     }
     return {
       handleClickAsync,
