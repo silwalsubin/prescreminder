@@ -36,7 +36,7 @@ export default {
   setup() {
     const store = useStore();
     const hapticsImpact = async () => {
-      await Haptics.impact({ style: ImpactStyle.Medium });
+      await Haptics.vibrate();
     }
     const initiateDashboard = async () => {
       await store.dispatch('loadMedicationsToday');
