@@ -25,7 +25,9 @@
         >
           {{ humanizedTime(item.eventDate) }}
         </ion-label>
-        {{item.event}}
+        <ion-text color="medium">
+          {{item.event}}
+        </ion-text>
         <ion-button 
           slot="end"
           fill="clear"
@@ -45,6 +47,7 @@ import {
   IonHeader,
   IonItem,
   IonLabel,
+  IonText,
   IonTitle, 
   IonToolbar,
 } from '@ionic/vue';
@@ -60,6 +63,7 @@ export default {
     IonHeader,
     IonItem,
     IonLabel,
+    IonText,
     IonTitle,
     IonToolbar,
   },
@@ -76,7 +80,7 @@ export default {
 
     const getItemColor = ((eventDate) => {
       const days = moment(eventDate).diff(moment(), 'day');
-      if (days < 7) return 'danger';
+      if (days < 5) return 'danger';
       else return 'warning';
     });
 

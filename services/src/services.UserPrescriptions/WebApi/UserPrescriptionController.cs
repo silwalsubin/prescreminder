@@ -114,7 +114,8 @@ namespace services.UserPrescriptions.WebApi
 
             await _notificationService.AddOrUpdateEventNotification(new EventNotification
             {
-                Event = $"Prescription Expiration for {model.Name}",
+                NotificationType = NotificationType.PrescriptionExpiration,
+                Entity = $"{model.Name} {model.UnitDose}",
                 EventDateUtc = PrescriptionExpirationCalculator.GetExpirationTimeUtc(model.TotalQuantity, model.StartDate, model.TimesOfDay.Count),
                 UserId = userId,
                 NotificationId = prescriptionId
@@ -173,7 +174,8 @@ namespace services.UserPrescriptions.WebApi
 
             await _notificationService.AddOrUpdateEventNotification(new EventNotification
             {
-                Event = $"Prescription Expiration for {payload.Name}",
+                NotificationType = NotificationType.PrescriptionExpiration,
+                Entity = $"{payload.Name} {payload.UnitDose}",
                 EventDateUtc = PrescriptionExpirationCalculator.GetExpirationTimeUtc(payload.TotalQuantity, payload.StartDate, payload.TimesOfDay.Count),
                 UserId = userId,
                 NotificationId = prescriptionId

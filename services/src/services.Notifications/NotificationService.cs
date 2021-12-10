@@ -20,7 +20,8 @@ namespace services.Notifications
             var record = new UserEventNotificationsTableSchema.UserEventNotificationRecord
             {
                 UserId = notification.UserId,
-                Event = notification.Event,
+                Event = notification.NotificationType,
+                Entity = notification.Entity,
                 NotificationId = notification.NotificationId,
                 ClearedDateUtc = null,
                 EventDateUtc = notification.EventDateUtc,

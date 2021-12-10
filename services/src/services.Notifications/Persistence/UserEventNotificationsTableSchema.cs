@@ -1,4 +1,5 @@
-﻿using contracts.Persistence;
+﻿using contracts.Notifications;
+using contracts.Persistence;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,7 +13,8 @@ namespace services.Notifications.Persistence
             CREATE TABLE [{Schema}].[{TableName}] (
 	            [NotificationId] [UniqueIdentifier] NOT NULL PRIMARY KEY,
 	            [UserId] [UniqueIdentifier] NOT NULL,
-	            [Event] [nvarchar](max) NOT NULL,
+	            [Event] [int] NOT NULL,
+	            [Entity] [nvarchar](max) NOT NULL,
 	            [EventDateUtc] [datetime] NOT NULL,
 				[ClearedDateUtc] [datetime] NULL
 			)
@@ -25,7 +27,8 @@ namespace services.Notifications.Persistence
         {
             public Guid NotificationId { get; set; }
             public Guid UserId { get; set; }
-            public string Event { get; set; }
+            public NotificationType Event { get; set; }
+            public string Entity { get; set; }
             public DateTime EventDateUtc { get; set; }
             public DateTime? ClearedDateUtc { get; set; }
         }

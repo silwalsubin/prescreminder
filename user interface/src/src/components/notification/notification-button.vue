@@ -1,13 +1,13 @@
 <template>
   <ion-button
-    class="notification-button"
+    :class="hasNotifications ? 'has-notifications' : ''"
     fill="clear"
+    size="large"
     @click='setOpen(true)'
   >
-    <ion-icon :icon="notificationsOutline" />
-    <ion-label position="stacked">
-      <ion-badge :color="numberOfNotifications > 0 ? 'danger' : 'success'">{{numberOfNotifications}}</ion-badge>
-    </ion-label>
+    <ion-icon 
+      :color="hasNotifications ? 'danger': 'medium'" 
+      :icon="hasNotifications ? notificationsSharp : notificationsOutline" />
     <ion-modal
       :is-open="isOpenRef"
       @didDismiss="setOpen(false)"
@@ -22,17 +22,14 @@
 
 <script lang="ts">
 import {
-  IonBadge,
   IonButton,
   IonIcon,
-  IonLabel,
   IonModal,
 } from '@ionic/vue';
 
 import {
-  notificationsOutline,
-  notificationsOff,
-  notifications
+  notificationsSharp,
+  notificationsOutline
 } from 'ionicons/icons';
 
 import { useStore } from '@/store/store';
@@ -42,10 +39,8 @@ import Modal from './notification-modal.vue'
 export default  {
   name: 'LogIn',
   components: {
-    IonBadge,
     IonButton,
     IonIcon,
-    IonLabel,
     IonModal,
     Modal,
   },
@@ -54,24 +49,29 @@ export default  {
     const isOpenRef = ref(false);
     const setOpen = (state: boolean) => isOpenRef.value = state;
 
-    const numberOfNotifications = computed(() => store.getters.notifications.length);
+    const hasNotifications = computed(() => {
+      return store.getters.notifications.length !== 0;
+    });
+
     return {
       setOpen,
-      numberOfNotifications,
+      hasNotifications,
       isOpenRef,
-      notificationsOutline,
-      notifications,
-      notificationsOff,
+      notificationsSharp,
+      notificationsOutline
     }
   }
 }
 </script>
 
 <style scoped>
-.notification-button {
-  --padding-bottom: 0px;
-  --padding-start: 0px;
-  --padding-top: 0px;
-  --padding-end: 0px;
+.has-notifications {
+  animation: blinker 3s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0.3;
+  }
 }
 </style>

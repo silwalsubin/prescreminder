@@ -6,7 +6,8 @@ namespace contracts.Notifications
     {
         public Guid UserId { get; set; }
         public Guid NotificationId { get; set; }
-        public string Event { get; set; }
+        public NotificationType NotificationType { get; set; }
+        public string Entity { get; set; }
         public DateTime EventDateUtc { get; set; }
     }
 }

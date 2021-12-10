@@ -24,13 +24,14 @@ namespace services.Notifications.WebApi
             var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
             var notifications = await _userEventNotificationRepository.GetByUserIdAsync(userId);
             var expiringNotifications =
-                notifications.Where(x => x.EventDateUtc.AddDays(-7).Date <= DateTime.UtcNow.Date);
+                notifications.Where(x => x.EventDateUtc.AddDays(-10).Date <= DateTime.UtcNow.Date);
             var nonClearedNotifications = expiringNotifications.Where(x =>
-                !x.ClearedDateUtc.HasValue || (x.ClearedDateUtc.Value.Date != DateTime.UtcNow.Date));
+                !x.ClearedDateUtc.HasValue || (x.ClearedDateUtc.Value.Date != DateTime.UtcNow.Date))
+                .OrderBy(x => x.EventDateUtc);
             var result = nonClearedNotifications.Select(x => new
             {
                 x.NotificationId,
-                x.Event,
+                Event = x.GetVerbiage(),
                 EventDate = x.EventDateUtc
             });
             return Ok(result);
