@@ -14,6 +14,7 @@
     </ion-header>
     <ion-content :fullscreen="true" slot="fixed">
       <blackboard class="notification-blackboard"
+        v-if="notifications.length === 0"
         message="You do not have any notifications at the moment"
         type="success"
       />
