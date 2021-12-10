@@ -1,6 +1,6 @@
 <template>
   <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button @click="handleClickAsync" color="light">
+    <ion-fab-button @click="handleClickAsync" color="medium">
       <ion-icon :icon="shareOutline"></ion-icon>
     </ion-fab-button>
   </ion-fab>

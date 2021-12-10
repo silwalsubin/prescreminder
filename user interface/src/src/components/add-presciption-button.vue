@@ -1,5 +1,5 @@
 <template>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" :class="blink ? 'add-prescription-button--blink': ''">
     <ion-fab-button @click="setOpen(true)" color="success">
       <ion-icon :icon="add"></ion-icon>
     </ion-fab-button>
@@ -23,6 +23,9 @@ import Modal from './add-edit-prescription-modal.vue'
 
 export default {
   components: { IonModal, Modal, IonFab, IonFabButton, IonIcon, },
+  props: {
+    blink: { type: Boolean, default: false, required: false }
+  },
   setup() {
     const isOpenRef = ref(false);
     const setOpen = (state) => isOpenRef.value = state;
@@ -34,3 +37,10 @@ export default {
   }
 };
 </script>
+
+<style scoped lang="scss">
+@import "@/styles/animations/blinking-animation.scss";
+.add-prescription-button--blink {
+  animation: $blink-default;
+}
+</style>

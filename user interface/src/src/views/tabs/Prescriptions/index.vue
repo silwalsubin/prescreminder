@@ -2,14 +2,15 @@
   <ion-page>
     <tab-header header-title="My Prescriptions"/>
     <ion-content :fullscreen="true">
-      <add-prescription-button />
+      <add-prescription-button 
+        :blink="prescriptions.length === 0"
+      />
       <share-prescription-button v-if="prescriptions.length > 0"/>
       <!-- <download-prescription-button v-if="prescriptions.length > 0"/> -->
-      <div class="no-prescriptions" v-if="prescriptions.length === 0">
-        <ion-text color="medium">
-        You do not have any prescriptions. Click the + button to create one.
-        </ion-text>
-      </div>
+      <blackboard v-if="prescriptions.length === 0"
+        message="You do not have any prescriptions. Click the + button to create one."
+        type="info"
+      />
       <div v-else class="prescriptions-tab-container">
         <prescription 
           v-for="prescription in prescriptions" 
@@ -25,11 +26,11 @@
 import { 
   IonContent,
   IonPage,
-  IonText,
 } from '@ionic/vue';
 
 import AddPrescriptionButton from '@/components/add-presciption-button.vue'
 import SharePrescriptionButton from "./share-prescriptions-button.vue"
+import Blackboard from "@/components/wall/blackboard.vue"
 // import DownloadPrescriptionButton from "./download-prescriptions-button.vue"
 import TabHeader from '@/components/tabs/tab-header.vue'
 import { useStore } from '@/store/store'
@@ -39,11 +40,11 @@ export default  {
   name: 'PrescriptionsTab',
   components: {
     AddPrescriptionButton,
+    Blackboard,
     // DownloadPrescriptionButton,
     SharePrescriptionButton,
     IonContent,
     IonPage,
-    IonText,
     Prescription,
     TabHeader,
   },

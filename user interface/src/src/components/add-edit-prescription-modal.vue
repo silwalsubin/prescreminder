@@ -88,7 +88,8 @@
           Delete
         </ion-button>
       </div>
-      <ion-button 
+      <ion-button
+        class="save-button"
         size="large" 
         color="success"
         expand="full"
@@ -232,5 +233,12 @@ export default {
   margin-top: 15px;
   padding-left: 15px;
   padding-right: 15px;
+}
+</style>
+
+<style scoped lang="scss">
+@import "@/styles/animations/blinking-animation.scss";
+.save-button {
+  animation: $blink-default;
 }
 </style>

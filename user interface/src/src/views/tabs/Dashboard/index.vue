@@ -2,15 +2,21 @@
   <ion-page>
     <tab-header header-title="Reminders Today"/>
     <ion-content :fullscreen="true"> 
-      <add-prescription-button v-if="prescriptions.length === 0" />
-      <div class="no-prescriptions" v-if="medicationsToday.length === 0">
-        <ion-text color="medium" v-if="prescriptions.length === 0">
-        No medication list available since you do not have any prescriptions. Click the + button to create one.
-        </ion-text>
-        <ion-text color="medium" v-else>
-        You do not have any medicine to intake now.
-        </ion-text>
-      </div>
+      <add-prescription-button 
+        v-if="prescriptions.length === 0"
+        :blink="true"
+      />
+      <template v-if="medicationsToday.length === 0">
+        <blackboard v-if="prescriptions.length === 0"
+          message="No reminder available as you do not have any prescriptions. Click the + button to create one."
+          type="info"
+        />
+        <blackboard 
+          v-else
+          message="You do not have any medicine to intake now."
+          type="success"
+        />
+      </template>
       <medication-info 
         v-for="(medicationToday, index) in medicationsToday" 
         :key="index"
@@ -22,6 +28,7 @@
 
 <script lang="ts">
 import AddPrescriptionButton from '@/components/add-presciption-button.vue'
+import Blackboard from '@/components/wall/blackboard.vue'
 import TabHeader from '@/components/tabs/tab-header.vue'
 import { useStore } from '@/store/store'
 import { computed } from 'vue'
@@ -29,7 +36,6 @@ import MedicationInfo from './medication-info.vue'
 import {
   IonPage,
   IonContent,
-  IonText,
 } from '@ionic/vue';
 
 
@@ -37,10 +43,10 @@ export default  {
   name: 'DashboardTab',
   components: { 
     AddPrescriptionButton,
+    Blackboard,
     IonContent, 
     TabHeader, 
     IonPage, 
-    IonText,
     MedicationInfo,
   },
   setup() {
@@ -54,15 +60,3 @@ export default  {
   }
 }
 </script>
-
-<style scoped>
-.no-prescriptions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding-left: 10px;
-  padding-right: 10px;
-  text-align: center;
-}
-</style>

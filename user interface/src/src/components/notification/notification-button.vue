@@ -2,7 +2,6 @@
   <ion-button
     :class="hasNotifications ? 'has-notifications' : ''"
     fill="clear"
-    size="large"
     @click='setOpen(true)'
   >
     <ion-icon 
@@ -64,14 +63,9 @@ export default  {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/styles/animations/blinking-animation.scss";
 .has-notifications {
-  animation: blinker 3s linear infinite;
-}
-
-@keyframes blinker {
-  50% {
-    opacity: 0.3;
-  }
+  animation: $blink-default;
 }
 </style>

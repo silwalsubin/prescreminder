@@ -26,7 +26,8 @@
         </ion-item>
         <br>
         <div class="log-in-buttons">
-          <ion-button 
+          <ion-button
+            class="log-in-button"
             size="large" 
             shape="round" 
             color="success"

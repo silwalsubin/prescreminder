@@ -1,10 +1,10 @@
 <template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>{{headerTitle}}</ion-title>
-        <notification-button slot="end"/>
-      </ion-toolbar>
-    </ion-header>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>{{headerTitle}}</ion-title>
+      <notification-button slot="end" />
+    </ion-toolbar>
+  </ion-header>
 </template>
 
 <script lang="ts">

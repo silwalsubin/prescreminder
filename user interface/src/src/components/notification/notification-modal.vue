@@ -13,6 +13,10 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" slot="fixed">
+      <blackboard class="notification-blackboard"
+        message="You do not have any notifications at the moment"
+        type="success"
+      />
       <ion-item
         class="notification-item"
         v-for="item in notifications" 
@@ -51,6 +55,7 @@ import {
   IonTitle, 
   IonToolbar,
 } from '@ionic/vue';
+import Blackboard from "@/components/wall/blackboard.vue";
 import { computed } from 'vue'
 import { useStore } from '@/store/store'
 import moment from 'moment'
@@ -58,6 +63,7 @@ import moment from 'moment'
 export default {
   name: 'NotificationsModal',
   components: {
+    Blackboard,
     IonButton, 
     IonContent,
     IonHeader,
@@ -102,5 +108,9 @@ export default {
 <style scoped>
 .notification-item {
   --inner-padding-bottom: 15px;
+}
+
+.notification-blackboard {
+  margin-top: 40px;
 }
 </style>
