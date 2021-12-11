@@ -1,7 +1,14 @@
-$blink-default: blinker 3s linear infinite;
+$blink-default: defaultBlinker 3s linear infinite;
+$blink-light: lightBlinker 3s linear infinite;
 
-@keyframes blinker {
+@keyframes defaultBlinker {
   50% {
     opacity: 0.4;
+  }
+}
+
+@keyframes lightBlinker {
+  50% {
+    opacity: 0.6;
   }
 }
