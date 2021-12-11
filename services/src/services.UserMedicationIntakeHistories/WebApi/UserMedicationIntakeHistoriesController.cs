@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using middleware.Authentication;
+using prescreminder.Utilities;
 using services.UserMedicationIntakeHistories.Domain;
 using services.UserMedicationIntakeHistories.Persistence;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using prescreminder.Utilities;
 using TimeZoneConverter;
 
 namespace services.UserMedicationIntakeHistories.WebApi
@@ -44,9 +44,9 @@ namespace services.UserMedicationIntakeHistories.WebApi
 
         [HttpGet]
         [Route("today")]
-        public async Task<IActionResult> GetHistoriesForToday(string timeZone)
+        public async Task<IActionResult> GetHistoriesForToday()
         {
-            var timeZoneInfo = TZConvert.GetTimeZoneInfo(timeZone);
+            var timeZoneInfo = TZConvert.GetTimeZoneInfo(Request.GetUserTimeZone());
             var dateFromUtc = timeZoneInfo.GetStartOfDayUtc();
             var dateToUtc = timeZoneInfo.GetEndOfDayUtc();
 

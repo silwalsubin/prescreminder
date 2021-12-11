@@ -28,9 +28,9 @@ namespace services.UserPrescriptions.WebApi
         }
 
         [HttpGet]
-        public async Task<IEnumerable<MedicationInfoViewModel>> Get(string timeZone)
+        public async Task<IEnumerable<MedicationInfoViewModel>> Get()
         {
-            var timeZoneInfo = TZConvert.GetTimeZoneInfo(timeZone);
+            var timeZoneInfo = TZConvert.GetTimeZoneInfo(Request.GetUserTimeZone());
             var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
             var prescriptionRecords = (await _userPrescriptionsRepository.GetByUserIdAsync(userId));
             var result = new List<MedicationInfoViewModel>();

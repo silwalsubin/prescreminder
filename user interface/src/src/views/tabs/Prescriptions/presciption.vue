@@ -1,12 +1,14 @@
 <template>
   <form-item>
     <div class="prescription-information">
-      <ion-label color="dark" position="stacked">
-        {{prescription.name}}
+      <ion-label color="dark" class="precription-unit-dose-badge">
+        {{prescription.name}} {{prescription.unitDose}}
       </ion-label>
-      <ion-text color="medium">
-        <p>{{prescription.unitDose}}</p>
-      </ion-text>
+      <div class="prescription-content">
+        <ion-chip :outline="false" :disabled="true">
+          {{prescription.totalQuantity}} remaining
+        </ion-chip>
+      </div>
     </div>
     <div class="prescription-actions" slot="end">
       <ion-button
@@ -51,7 +53,7 @@ import {
   IonModal,
   IonIcon,
   IonLabel,
-  IonText,
+  IonChip,
   actionSheetController,
   alertController,
 } from '@ionic/vue';
@@ -64,7 +66,7 @@ export default {
     IonIcon,
     IonLabel,
     IonModal,
-    IonText,
+    IonChip,
   },
   props: {
     prescription: { type: PrescriptionViewModal, required: true }
@@ -138,8 +140,17 @@ export default {
 
 <style scoped lang="scss">
 @import "@/styles/animations/blinking-animation.scss";
+.prescription-information {
+  padding-bottom: 5px;
+}
+
 .prescription-action-button {
+  margin-top: -10px;
   margin-right: -13px;
   animation: $blink-light;
+}
+
+.prescription-content {
+  margin-left: -5px;
 }
 </style>

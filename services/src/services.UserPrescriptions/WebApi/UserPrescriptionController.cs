@@ -67,8 +67,8 @@ namespace services.UserPrescriptions.WebApi
                     UnitDose = x.UnitDose,
                     CompleteDate = x.CompleteDateUtc,
                     StartDate = x.StartDateUtc,
-                    TotalQuantity = x.TotalQuantity,
-                    TimesOfDay = prescriptionTimes
+                    TotalQuantity = x.QuantityRemaining(Request.GetUserTimeZone(), prescriptionTimes),
+                    TimesOfDay = prescriptionTimes,
                 };
 
                 result.Add(viewModal);

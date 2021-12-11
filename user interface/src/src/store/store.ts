@@ -47,10 +47,9 @@ export const store = createStore<State>({
       });
     },
     loadMedicationsToday({commit}){
-      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      return httpClient.get(`/userMedicationToday?timeZone=${timeZone}`).then(response => {
+      return httpClient.get(`userMedicationToday`).then(response => {
         const userMedications: MedicationCheckListItem[] = response.data;
-        return httpClient.get(`/userMedicationIntakeHistories/today?timeZone=${timeZone}`)
+        return httpClient.get(`userMedicationIntakeHistories/today`)
         .then(res => {
           const historiesToday: UserHistoryViewModel[] = res.data;
           userMedications.forEach(element => {

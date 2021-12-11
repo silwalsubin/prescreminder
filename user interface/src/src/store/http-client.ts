@@ -33,7 +33,18 @@ const injectBearerToken = (config: AxiosRequestConfig): AxiosRequestConfig => {
     return config;
 }
 
+const injectUserTimeZone = (config: AxiosRequestConfig): AxiosRequestConfig => {
+  if (config.headers) {
+    config.headers["timeZone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  }
+  return config;
+}
+
 httpClient.interceptors.request.use(injectBearerToken, error => {
+  Promise.reject(error)
+})
+
+httpClient.interceptors.request.use(injectUserTimeZone, error => {
   Promise.reject(error)
 })
 export default httpClient;
