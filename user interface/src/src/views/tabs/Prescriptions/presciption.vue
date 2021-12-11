@@ -89,6 +89,43 @@ export default {
               },
             },
             {
+              text: 'Refill',
+              handler: async () => {
+                const alert = await alertController.create({
+                  header: `${itemLabel.value}`,
+                  inputs: [{
+                      name: 'refill',
+                      value: '',
+                      type: 'number',
+                      min: 0,
+                      placeholder: 'Refill Quantity',
+                    },
+                  ],
+                  buttons: [
+                    {
+                      text: 'Cancel',
+                      role: 'cancel',
+                      handler: () => {
+                        // do nothing 
+                      },
+                    },
+                    {
+                      text: 'Refill',
+                      handler: async (data) => {
+                        await store.dispatch('refill', {
+                          prescriptionId: props.prescription.prescriptionId,
+                          refill: Number(data.refill)
+                        });
+                        const message = `Refill added successfully`;
+                        await notifyAsync(NotificationType.Success, message);
+                      },
+                    },
+                  ],
+                });
+                await alert.present();
+              },
+            },
+            {
               text: 'Delete',
               role: 'destructive',
               handler: async () => {

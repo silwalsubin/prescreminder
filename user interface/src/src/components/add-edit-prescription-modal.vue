@@ -41,14 +41,14 @@
         :max="String(new Date().getFullYear() + 10)"
         :min="String(new Date().toISOString().split('T')[0])"
       />
-      <date-picker
+      <!-- <date-picker
         v-model:inputValue="form.completeDate"
         label="End Date"
         placeholder="Optional"
         :disabled="formDisabled"
         :max="String(new Date().getFullYear() + 10)"
         :min="String(new Date().toISOString().split('T')[0])"
-      />
+      /> -->
       <div class="medication-intake-items">
         <ion-text color="medium">
           <h5>Medication intake times</h5>

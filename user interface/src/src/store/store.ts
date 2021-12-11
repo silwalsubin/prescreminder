@@ -112,6 +112,11 @@ export const store = createStore<State>({
         dispatch('loadNotifications');
       })
     },
+    refill({dispatch}, payload) {
+      return httpClient.post(`userPrescription/${payload.prescriptionId}/refill/${payload.refill}`).then(() => {
+        dispatch('loadPrescriptions');
+      })  
+    },
     updateMedicationTaken({commit}, payload: MedicationCheckListItem){
       if (payload.historyId) {
         return httpClient.delete(`/userMedicationIntakeHistories/${payload.historyId}`).then(() => {

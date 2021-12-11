@@ -77,6 +77,31 @@ namespace services.UserPrescriptions.WebApi
         }
 
         [HttpPost]
+        [Route("{id:guid}/refill/{refill:int}")]
+        public async Task<IActionResult> Refill(Guid id, int refill)
+        {
+            var userId = HttpContext.GetClaimValue<Guid>(ClaimType.UserId);
+            var prescriptionRecord = (await _userPrescriptionsRepository.GetByUserIdAsync(userId)).Single(x => x.PrescriptionId == id);
+            prescriptionRecord.TotalQuantity += refill;
+            await _userPrescriptionsRepository.UpdateAsync(prescriptionRecord);
+            var timesOfDay = await _prescriptionTimesRepository.GetAsync(id);
+            await _notificationService.AddOrUpdateEventNotification(new EventNotification
+            {
+                NotificationType = NotificationType.PrescriptionExpiration,
+                Entity = $"{prescriptionRecord.Name} {prescriptionRecord.UnitDose}",
+                EventDateUtc = prescriptionRecord.GetExpirationTimeUtc(Request.GetUserTimeZone(), timesOfDay.Select(x => new TimeOfDay
+                {
+                    Hour = x.Hour,
+                    Minute = x.Minute
+                }).ToList()),
+                UserId = userId,
+                NotificationId = prescriptionRecord.PrescriptionId
+            });
+
+            return Ok();
+        }
+
+        [HttpPost]
         [Route("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] PrescriptionViewModel model)
         {
