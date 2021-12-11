@@ -28,7 +28,7 @@
       />
       <input-field
         v-model:inputValue="form.totalQuantity"
-        label="Total Quantity"
+        label="Total Quantity Available"
         placeholder="Required"
         type="number"
         :disabled="formDisabled"

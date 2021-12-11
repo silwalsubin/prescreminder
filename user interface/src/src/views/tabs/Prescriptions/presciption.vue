@@ -139,15 +139,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/animations/blinking-animation.scss";
 .prescription-information {
   padding-bottom: 5px;
 }
 
 .prescription-action-button {
-  margin-top: -10px;
+  margin-top: -15px;
   margin-right: -13px;
-  animation: $blink-light;
 }
 
 .prescription-content {
