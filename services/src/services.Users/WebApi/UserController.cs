@@ -89,5 +89,13 @@ namespace services.Users.WebApi
             await _usersRepository.DeleteByUserId(userId);
             return Ok();
         }
+
+        [HttpGet]
+        [Route("sessionCheck")]
+        public async Task<IActionResult> SessionCheck()
+        {
+            await Task.CompletedTask;
+            return Ok();
+        }
     }
 }

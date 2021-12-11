@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-tabs>
+    <ion-tabs @ionTabsDidChange="afterTabChange">
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="tab1" href="/tabs/dashboard" >
@@ -37,7 +37,11 @@ export default {
     onMounted(async () => {
       await store.dispatch('loadPrescriptions');
     })
+    const afterTabChange = async () => {
+      await store.dispatch('sessionCheck');
+    }
     return {
+      afterTabChange,
       homeOutline,
       listCircleOutline,
       personCircle,

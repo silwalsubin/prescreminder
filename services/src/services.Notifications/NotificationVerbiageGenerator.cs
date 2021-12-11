@@ -11,8 +11,8 @@ namespace services.Notifications
             return record.Event switch
             {
                 NotificationType.PrescriptionExpiration => record.EventDateUtc > DateTime.UtcNow
-                    ? $"Prescription for {record.Entity} needs to be refilled."
-                    : $"Prescription for {record.Entity} needed to be refilled.",
+                    ? $"{record.Entity} is running out soon. Please refill it as soon as possible"
+                    : $"You've ran out of {record.Entity}. Please refill it immediately.",
                 _ => throw new Exception("Notification Event is not supported")
             };
         }

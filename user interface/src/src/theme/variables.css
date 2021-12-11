@@ -4,7 +4,7 @@ http://ionicframework.com/docs/theming/ */
 /** Ionic CSS Variables **/
 :root {
 
-  --ion-font-family: "Roboto" , "Helvetica-Neue", "sans-serif", "Roboto-Light" !important;
+  /* --ion-font-family: "Roboto" , "Helvetica-Neue", "sans-serif", "Roboto-Light" !important; */
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;

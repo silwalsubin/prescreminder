@@ -30,7 +30,7 @@
         >
           {{ humanizedTime(item.eventDate) }}
         </ion-label>
-        <ion-text color="medium">
+        <ion-text color="medium" class="notification-message">
           {{item.event}}
         </ion-text>
         <ion-button 
@@ -106,12 +106,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/styles/fonts/font-sizes.scss";
 .notification-item {
   --inner-padding-bottom: 15px;
 }
 
 .notification-blackboard {
   margin-top: 40px;
+}
+
+.notification-message {
+  font-size: $font-size-sm;
 }
 </style>

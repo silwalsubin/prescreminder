@@ -132,6 +132,9 @@ export const store = createStore<State>({
         });
       }
     },
+    sessionCheck() {
+      return httpClient.get(`/user/sessionCheck`);
+    },
     logOut() {
       removeBearerToken();
     }
