@@ -9,23 +9,34 @@ namespace services.UserPrescriptions
 {
     public static class PrescriptionExpirationCalculator
     {
-        public static DateTime GetExpirationTimeUtc(int quantityAvailable, DateTime startTimeUtc, int occurrenceInDay)
+        public static DateTime GetExpirationTimeUtc(this UserPrescriptionsTableSchema.UserPrescriptionRecord record, string timeZone, List<TimeOfDay> timeOfDays)
         {
-            var days = quantityAvailable / occurrenceInDay;
-            return startTimeUtc.AddDays(days);
+            var timeZoneInfo = TZConvert.GetTimeZoneInfo(timeZone);
+            var localFromDate = record.StartDateUtc > record.ModifiedDateUtc
+                ? record.StartDateUtc.Add(timeZoneInfo.BaseUtcOffset)
+                : record.ModifiedDateUtc.Add(timeZoneInfo.BaseUtcOffset);
+
+            for (int i = 0; i < record.TotalQuantity; i++)
+            {
+                localFromDate = localFromDate.IncrementTime(timeOfDays);
+            }
+
+            return localFromDate.Subtract(timeZoneInfo.BaseUtcOffset);
         }
 
         public static int QuantityRemaining(this UserPrescriptionsTableSchema.UserPrescriptionRecord record, string timeZone, List<TimeOfDay> timeOfDays)
         {
             var timeZoneInfo = TZConvert.GetTimeZoneInfo(timeZone);
-            var localLastModifiedTime = record.ModifiedDateUtc.Add(timeZoneInfo.BaseUtcOffset);
+            var localFromDate = record.StartDateUtc > record.ModifiedDateUtc
+                                ? record.StartDateUtc.Add(timeZoneInfo.BaseUtcOffset)
+                                : record.ModifiedDateUtc.Add(timeZoneInfo.BaseUtcOffset);
             var localTimeNow = DateTime.UtcNow.Add(timeZoneInfo.BaseUtcOffset);
 
             int quantitySpent = 0;
-            localLastModifiedTime = localLastModifiedTime.IncrementTime(timeOfDays);
-            while (localLastModifiedTime < localTimeNow)
+            localFromDate = localFromDate.IncrementTime(timeOfDays);
+            while (localFromDate < localTimeNow)
             {
-                localLastModifiedTime = localLastModifiedTime.IncrementTime(timeOfDays);
+                localFromDate = localFromDate.IncrementTime(timeOfDays);
                 quantitySpent++;
             }
 

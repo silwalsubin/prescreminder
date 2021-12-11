@@ -116,7 +116,7 @@ namespace services.UserPrescriptions.WebApi
             {
                 NotificationType = NotificationType.PrescriptionExpiration,
                 Entity = $"{model.Name} {model.UnitDose}",
-                EventDateUtc = PrescriptionExpirationCalculator.GetExpirationTimeUtc(model.TotalQuantity, model.StartDate, model.TimesOfDay.Count),
+                EventDateUtc = userPrescriptionRecord.GetExpirationTimeUtc(Request.GetUserTimeZone(), model.TimesOfDay),
                 UserId = userId,
                 NotificationId = prescriptionId
             });
@@ -150,13 +150,14 @@ namespace services.UserPrescriptions.WebApi
                 ModifiedDateUtc = DateTime.UtcNow,
                 StartDateUtc = payload.StartDate,
                 CompleteDateUtc = payload.CompleteDate,
-                ExpirationDateUtc = PrescriptionExpirationCalculator.GetExpirationTimeUtc(payload.TotalQuantity, payload.StartDate, payload.TimesOfDay.Count),
+                ExpirationDateUtc = null, // todo:need to get rid of this field soon
                 Name = payload.Name,
                 TotalQuantity = payload.TotalQuantity,
                 UnitDose = payload.UnitDose,
             };
 
-            var uniquePrescriptionTimeRecords = payload.TimesOfDay.Select(x => new { x.Hour, x.Minute }).Distinct().Select(x =>
+            var uniqueTimesOfDay = payload.TimesOfDay.Select(x => new { x.Hour, x.Minute }).Distinct().ToList();
+            var uniquePrescriptionTimeRecords = uniqueTimesOfDay.Select(x =>
                  new PrescriptionTimesTableSchema.PrescriptionTimeRecord
                  {
                      PrescriptionId = prescriptionId,
@@ -164,7 +165,7 @@ namespace services.UserPrescriptions.WebApi
                      Hour = x.Hour,
                      Minute = x.Minute,
                      Second = 0
-                 });
+                 }).ToList();
 
             await _userPrescriptionsRepository.InsertAsync(userPrescriptionRecord);
             foreach (var prescriptionRecord in uniquePrescriptionTimeRecords)
@@ -176,7 +177,11 @@ namespace services.UserPrescriptions.WebApi
             {
                 NotificationType = NotificationType.PrescriptionExpiration,
                 Entity = $"{payload.Name} {payload.UnitDose}",
-                EventDateUtc = PrescriptionExpirationCalculator.GetExpirationTimeUtc(payload.TotalQuantity, payload.StartDate, payload.TimesOfDay.Count),
+                EventDateUtc = userPrescriptionRecord.GetExpirationTimeUtc(Request.GetUserTimeZone(), uniquePrescriptionTimeRecords.Select(x => new TimeOfDay
+                {
+                    Hour = x.Hour,
+                    Minute = x.Minute
+                }).ToList()),
                 UserId = userId,
                 NotificationId = prescriptionId
             });
