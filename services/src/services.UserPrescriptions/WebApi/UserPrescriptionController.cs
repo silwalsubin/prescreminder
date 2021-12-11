@@ -58,7 +58,7 @@ namespace services.UserPrescriptions.WebApi
                 {
                     Hour = t.Hour,
                     Minute = t.Minute,
-                }).ToList();
+                }).OrderBy(t => new TimeSpan(t.Hour, t.Minute, 0)).ToList();
 
                 var viewModal = new PrescriptionViewModel
                 {

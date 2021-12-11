@@ -68,6 +68,7 @@
         <ion-button
           fill="outline"
           color="medium"
+          class="time-of-day-button"
         > 
           <time-picker
             :hour="timeOfDay.hour"
@@ -240,5 +241,9 @@ export default {
 @import "@/styles/animations/blinking-animation.scss";
 .save-button {
   animation: $blink-default;
+}
+
+.time-of-day-button {
+  width: 200px;
 }
 </style>

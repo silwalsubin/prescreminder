@@ -3,21 +3,21 @@
     <div class="medication-info-item">
       <ion-label
         :color="isTaken ? 'medium': 'dark'" 
-        position="stacked"
       >
         {{medicationInfo.name}} {{medicationInfo.quantity}}
       </ion-label>
       <ion-text 
         :color="isTaken ? 'medium': medicationInfoColor"
       >
-        <p>{{humanizedTime}}</p>
+        <h1 class="medication-info--time">{{humanizedTime}}</h1>
       </ion-text>
     </div>
     <ion-toggle slot="end"
       @ionChange="handleTakenChange"
       :checked="!isTaken"
-      color="success">
-    </ion-toggle>
+      color="success"
+      class="medication-info--toggle"
+    />
   </form-item>
 </template>
 
@@ -57,7 +57,7 @@ export default {
       const minutes = medicationInfoDateTimeMoment.value.diff(moment(), 'minutes');
       if (minutes <= 0) return "danger";
       if (minutes <= 10) return "warning";
-      else return "primary";
+      else return "dark";
     })
     const handleTakenChange = () => {
       store.dispatch('updateMedicationTaken', props.medicationInfo);
@@ -77,5 +77,13 @@ export default {
 .medication-info-ion-item {
   --border-radius: 5px;
   --inner-padding-top: 15px;
+}
+
+.medication-info--time {
+  margin-top: 10px;
+}
+
+.medication-info--toggle {
+  margin-top: -15px;
 }
 </style>
