@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\contracts.Notifications\contracts.Notifications.csproj" />
     <ProjectReference Include="..\contracts.Persistence\contracts.Persistence.csproj" />
+    <ProjectReference Include="..\infrastructures.BackgroundJobs\infrastructures.BackgroundJobs.csproj" />
     <ProjectReference Include="..\middleware.Authentication\middleware.Authentication.csproj" />
   </ItemGroup>
 

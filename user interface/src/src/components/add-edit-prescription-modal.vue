@@ -238,11 +238,6 @@ export default {
 </style>
 
 <style scoped lang="scss">
-@import "@/styles/animations/blinking-animation.scss";
-.save-button {
-  animation: $blink-default;
-}
-
 .time-of-day-button {
   width: 200px;
 }

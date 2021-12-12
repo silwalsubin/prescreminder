@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using infrastructures.BackgroundJobs;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -35,9 +36,12 @@ namespace prescreminder.API.Configurations
             app.UseAuthorization();
             app.UseAuthentication();
 
+            app.ConfigureBackgroundJobsInfrastructure();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers().RequireAuthorization();
+                endpoints.ConfigureBackgroundJobsInfrastructure();
             });
 
             if (context.HostingEnvironment.IsProduction())

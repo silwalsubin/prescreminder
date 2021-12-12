@@ -1,4 +1,5 @@
 ﻿using contracts.Notifications;
+using infrastructures.BackgroundJobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using middleware.Authentication;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeZoneConverter;
 
 namespace services.UserPrescriptions.WebApi
 {
@@ -21,18 +23,20 @@ namespace services.UserPrescriptions.WebApi
         private readonly PrescriptionTimesRepository _prescriptionTimesRepository;
         private readonly INotificationService _notificationService;
         private readonly PrescriptionsPdfGenerator _prescriptionsPdfGenerator;
+        private readonly IBackgroundJobsInfrastructure _backgroundJobsInfrastructure;
 
         public UserPrescriptionController(
             UserPrescriptionsRepository userPrescriptionsRepository,
             PrescriptionTimesRepository prescriptionTimesRepository,
             INotificationService notificationService,
-            PrescriptionsPdfGenerator prescriptionsPdfGenerator
-        )
+            PrescriptionsPdfGenerator prescriptionsPdfGenerator,
+            IBackgroundJobsInfrastructure backgroundJobsInfrastructure)
         {
             _userPrescriptionsRepository = userPrescriptionsRepository;
             _prescriptionTimesRepository = prescriptionTimesRepository;
             _notificationService = notificationService;
             _prescriptionsPdfGenerator = prescriptionsPdfGenerator;
+            _backgroundJobsInfrastructure = backgroundJobsInfrastructure;
         }
 
         [HttpGet]
@@ -128,7 +132,7 @@ namespace services.UserPrescriptions.WebApi
                     Hour = x.Hour,
                     Minute = x.Minute,
                     Second = 0
-                });
+                }).ToList();
 
             await _userPrescriptionsRepository.UpdateAsync(userPrescriptionRecord);
             await _prescriptionTimesRepository.DeleteByPrescriptionIdAsync(id);
@@ -145,6 +149,16 @@ namespace services.UserPrescriptions.WebApi
                 UserId = userId,
                 NotificationId = prescriptionId
             });
+
+            foreach (var timeOfDay in uniquePrescriptionTimeRecords)
+            {
+                _backgroundJobsInfrastructure.AddOrUpdateRecurringJob(
+                    $"{prescriptionId}-{timeOfDay.Hour}-{timeOfDay.Minute}",
+                    () => System.IO.File.WriteAllText(@$"C:\{timeOfDay.Hour}{timeOfDay.Minute}.txt", "hello world"),
+                    $"{timeOfDay.Minute} {timeOfDay.Hour} * * *",
+                    TZConvert.GetTimeZoneInfo(Request.GetUserTimeZone())
+                );
+            }
 
             return Ok();
         }

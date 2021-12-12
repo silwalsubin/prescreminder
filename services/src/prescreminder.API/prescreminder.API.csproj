@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\infrastructure.Database\infrastructure.Database.csproj" />
+    <ProjectReference Include="..\infrastructures.BackgroundJobs\infrastructures.BackgroundJobs.csproj" />
     <ProjectReference Include="..\middleware.Authentication\middleware.Authentication.csproj" />
     <ProjectReference Include="..\prescreminder.Utilities\prescreminder.Utilities.csproj" />
     <ProjectReference Include="..\services.Notifications\services.Notifications.csproj" />

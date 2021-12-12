@@ -9,6 +9,7 @@ using services.UserMedicationIntakeHistories;
 using services.UserPrescriptions;
 using services.Users;
 using System;
+using infrastructures.BackgroundJobs;
 
 namespace prescreminder.API.Configurations
 {
@@ -29,6 +30,7 @@ namespace prescreminder.API.Configurations
             AuthenticationMiddleWareConfiguration.Configure(services);
             UserMedicationIntakeHistoriesServiceConfiguration.Configure(services);
             DatabaseInfrastructureConfiguration.Configure(services);
+            BackgroundJobsInfrastructureServiceCollection.Configure(services);
             SqlMapper.AddTypeHandler(new DateTimeHandler());
         }
     }

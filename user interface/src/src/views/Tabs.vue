@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { IonTabBar, IonTabButton, IonTabs, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
+import { IonTabBar, IonTabButton, IonTabs, IonIcon, IonPage, IonRouterOutlet, alertController } from '@ionic/vue';
 import {
   homeOutline,
   listCircleOutline,
@@ -36,6 +36,31 @@ export default {
     const store = useStore();
     onMounted(async () => {
       await store.dispatch('loadPrescriptions');
+
+      for(let i=0; i <5; i++){
+        const alert = await alertController.create({
+          cssClass: 'my-custom-class',
+          header: 'Confirm!',
+          message: 'Message <strong>text</strong>!!!',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              cssClass: 'secondary',
+              handler: (blah) => {
+                console.log('Confirm Cancel:', blah);
+              },
+            },
+            {
+              text: 'Okay',
+              handler: () => {
+                console.log('Confirm Okay');
+              },
+            },
+          ],
+        });
+        alert.present();
+      }     
     })
     const afterTabChange = async () => {
       await store.dispatch('sessionCheck');
